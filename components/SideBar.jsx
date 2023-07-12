@@ -30,9 +30,9 @@ export default function SideBar() {
   const user = useSelector(state => state.user)
 
   return (
-    <div className="hidden sm:flex flex-col fixed h-full xl:ml-24  ">
+    <div className="hidden sm:flex flex-col fixed h-full md:ml-3 xl:ml-24  ">
       <nav className="h-full relative xl:space-y-1.5">
-        <div className="flex justify-center items-center py-3 xl:p-3 xl:justify-start">
+        <div className="flex justify-center items-center py-3  xl:p-3 xl:justify-start">
           <Image src={"/assets/twitter-logo.png"} width={34} height={34} />
         </div>
         <SideBarLink Icon={HomeIcon} text={"Home"} />

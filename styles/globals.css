@@ -4,11 +4,11 @@
 
 
 body {
-    @apply bg-black
+    @apply bg-white dark:bg-black
 }
 
 .hoverAnimation {
-    @apply hover:bg-white hover:bg-opacity-10 xl:p-3 rounded-full hover:cursor-pointer
+    @apply  dark:hover:bg-white hover:bg-black duration-100 ease-in-out hover:bg-opacity-10 dark:hover:bg-opacity-10 xl:p-3 rounded-full hover:cursor-pointer
     w-11 h-11 xl:w-auto xl:h-auto
 }
 

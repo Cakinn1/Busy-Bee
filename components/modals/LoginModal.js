@@ -22,7 +22,7 @@ export default function LoginModal() {
   return (
     <>
       <button
-        className="bg-transparent border border-white text-white w-[160px] 
+        className="bg-transparent border border-white dark:bg-white  font-bold text-white   dark:text-black w-[160px] 
         rounded-full h-[40px] hover:bg-[#cbd2d7]"
         onClick={() => dispatch(openLoginModal())}
       >
@@ -34,7 +34,7 @@ export default function LoginModal() {
         onClose={() => dispatch(closeLoginModal())}
         className="flex justify-center items-center"
       >
-        <div className="w-[90%] h-[600px] bg-black text-white md:w-[560px] md:h-[600px] border border-gray-700 rounded-lg flex justify-center">
+        <div className="w-[90%] h-[600px] bg-black text-black dark:text-white md:w-[560px] md:h-[600px] border border-gray-700 rounded-lg flex justify-center">
           <div className="w-[90%] mt-8 flex flex-col">
             <h1 className=" mt-4 font-bold text-4xl">
               Sign in to your account

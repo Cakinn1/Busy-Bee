@@ -42,8 +42,7 @@ export default function Trending() {
         />
       </div>
 
-      {/* who to follow change this later!! */}
-      <div className="w-[300px]         wsdwd bg-[#EFF3F4] dark:bg-white dark:bg-opacity-10 rounded-3xl mt-3">
+      <div className="w-[300px]  bg-[#EFF3F4] dark:bg-white dark:bg-opacity-10 rounded-3xl mt-3">
         <h1 className="font-bold text-xl p-3">Who To Follow</h1>
         <WhoToFollow
           ProfilePicture={

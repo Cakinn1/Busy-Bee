@@ -23,26 +23,27 @@ export default function SignupModal() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
 
-  const router = useRouter()
+  const router = useRouter();
 
   async function handleSignUp() {
     const userCredentials = await createUserWithEmailAndPassword(
       auth,
       email,
       password
-    )
+    );
 
     await updateProfile(auth.currentUser, {
       displayName: name,
-      photoURL: `./assets/profilePictures/pfp${Math.ceil(Math.random() * 6)}.png` 
-    })
+      photoURL: `./assets/profilePictures/pfp${Math.ceil(
+        Math.random() * 6
+      )}.png`,
+    });
 
-    router.reload()
+    router.reload();
   }
   async function handleGuestSignIn() {
-    await signInWithEmailAndPassword(auth, "guest12345@gmail.com", "123456")
+    await signInWithEmailAndPassword(auth, "guest12345@gmail.com", "123456");
   }
-
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -66,7 +67,7 @@ export default function SignupModal() {
     <>
       <button
         className="bg-white font-bold  text-black dark:text-white dark:bg-transparent dark:border-white dark:border w-[160px] 
-        rounded-full h-[40px] hover:bg-[#cbd2d7]"
+        rounded-full h-[40px] duration-300 dark:hover:bg-white dark:hover:text-black dark:hover:border-black"
         onClick={() => dispatch(openSignupModal())}
       >
         Sign Up
@@ -79,8 +80,10 @@ export default function SignupModal() {
       >
         <div className="w-[90%] h-[600px] bg-black text-white md:w-[560px] md:h-[600px] border border-gray-700 rounded-lg flex justify-center">
           <div className="w-[90%] mt-8 flex flex-col">
-            <button className="bg-white text-black w-full font-bold text-lg rounded-md p-2"
-            onClick={handleGuestSignIn}>
+            <button
+              className="bg-white text-black w-full font-bold text-lg rounded-md p-2"
+              onClick={handleGuestSignIn}
+            >
               Sign In as Guest
             </button>
             <h1 className="text-center mt-4 font-bold text-lg"> or</h1>

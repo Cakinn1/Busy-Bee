@@ -22,7 +22,6 @@ export default function Home() {
        flex"
       >
         <SideBar />
-
         <PostFeed />
         <Trending />
       </div>

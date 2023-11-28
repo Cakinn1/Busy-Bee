@@ -22,17 +22,15 @@ import { useDispatch, useSelector } from "react-redux";
 export default function TweetInput() {
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
-
   const [loading, setLoading] = useState(false);
 
   const filerPickerRef = useRef(null);
-
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   async function sendTweet() {
     if (!user.username) {
-      dispatch(openLoginModal())
-      return
+      dispatch(openLoginModal());
+      return;
     }
 
     setLoading(true);
@@ -71,11 +69,11 @@ export default function TweetInput() {
       setImage(e.target.result);
     });
   }
-
+  // dark:border-gray-700 border-gray-100 border-x dark:border-x
   return (
-    <div className="flex space-x-3 p-3 border-b border-gray-700">
+    <div className="flex space-x-3 p-3 border-b border-gray-200 text-black dark:border-gray-700">
       <img
-        src={user.photoUrl || "/assets/twitter-logo.png"}
+        src={user.photoUrl || "/assets/pfp.webp"}
         className="rounded-full w-11 h-11 object-cover"
       />
 
@@ -83,7 +81,7 @@ export default function TweetInput() {
       {!loading && (
         <div className="w-full">
           <textarea
-            className="bg-transparent resize-none outline-none w-full min-h-[50px] text-lg"
+            className="bg-transparent dark:text-white resize-none outline-none w-full min-h-[50px] text-lg"
             placeholder="What's on your mind?"
             onChange={(e) => setText(e.target.value)}
             value={text}
@@ -108,13 +106,13 @@ export default function TweetInput() {
             </div>
           )}
 
-          <div className="flex justify-between border-t border-gray-700 pt-4">
+          <div className="flex justify-between dark:border-t border-t border-gray-200 dark:border-gray-700 pt-4">
             <div className="flex space-x-0">
               <div
-                className="iconAnimation"
+                className={`iconAnimation`}
                 onClick={() => filerPickerRef.current.click()}
               >
-                <PhotographIcon className="h-[22px] text-[#1d9bf0]" />
+                <Icon Icons={PhotographIcon} />
               </div>
               <input
                 className="hidden"
@@ -122,31 +120,34 @@ export default function TweetInput() {
                 ref={filerPickerRef}
                 onChange={addImageToTweet}
               />
-              <div className="iconAnimation">
-                <ChartBarIcon className="h-[22px] text-[#1d9bf0]" />
-              </div>
-              <div className="iconAnimation">
-                <EmojiHappyIcon className="h-[22px] text-[#1d9bf0]" />
-              </div>
-              <div className="iconAnimation">
-                <CalendarIcon className="h-[22px] text-[#1d9bf0]" />
-              </div>
-              <div className="iconAnimation">
-                <LocationMarkerIcon className="h-[22px] text-[#1d9bf0]" />
-              </div>
+              <Icon Icons={ChartBarIcon} />
+              <Icon Icons={EmojiHappyIcon} />
+              <Icon Icons={CalendarIcon} />
+              <Icon Icons={LocationMarkerIcon} />
             </div>
             <button
-              className="bg-[#1d9bf0] rounded-full px-4 py-1.5
+              className="bg-[#F4AF01] text-black  dark:text-white rounded-full px-4 py-1.5
               disabled:opacity-50"
               // uid not loading when on this button in db
               onClick={sendTweet}
               disabled={!text && !image}
             >
-              Tweet
+              Bumble
             </button>
           </div>
         </div>
       )}
+    </div>
+  );
+}
+function Icon({ Icons }) {
+  return (
+    <div className="iconAnimation">
+      <Icons
+        className={`h-[22px]  text-[#F4AF01] ${
+          Icons === PhotographIcon ? "cursor-pointer" : "cursor-not-allowed"
+        }`}
+      />
     </div>
   );
 }

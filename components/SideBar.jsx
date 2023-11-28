@@ -57,20 +57,20 @@ export default function SideBar() {
         <SideBarLink Icon={InboxIcon} text={"Messages"} />
         <SideBarLink Icon={BookmarkIcon} text={"Bookmarks"} />
         <SideBarLink Icon={UserIcon} text={"Profile"} />
-        <SideBarLink Icon={DotsCircleHorizontalIcon} text={"More"} />
         <SideBarThemeToggle
           isDarkMode={isDarkMode}
           handleToggle={handleToggle}
         />
+        <SideBarLink Icon={DotsCircleHorizontalIcon} text={"More"} />
         <button
           className="bg-[#1d9bf0 bg-[#F4AF01] text-black dark:text-white rounded-full h-[52px] w-[200px] font-bold
          text-lg mt-2 xl:inline hidden"
         >
-          Tweet
+          Bumble
         </button>
         <div
           onClick={handleSignOut}
-          className=" bottom-0 hover:bg-white hover:bg-opacity-10
+          className=" bottom-0 hoverAnimation 
          cursor-pointer rounded-full absolute flex justify-center items-center space-x-3
          xl:p-3"
         >
@@ -79,10 +79,12 @@ export default function SideBar() {
             src={user.photoUrl || "/assets/kylie.png"}
           />
           <div className="hidden xl:inline">
-            <h1 className="font-bold whitespace-nowrap">{user.name}</h1>
+            <h1 className="font-bold whitespace-nowrap dark:text-white text-black">
+              {user.name}
+            </h1>
             <h1 className="text-gray-500">@{user.username}</h1>
           </div>
-          <DotsHorizontalIcon className="h-5" />
+          <DotsHorizontalIcon className="h-5 dark:text-white text-black" />
         </div>
       </nav>
     </div>

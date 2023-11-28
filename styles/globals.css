@@ -2,18 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
-    @apply bg-white dark:bg-black
+  @apply bg-white dark:bg-black;
 }
 
 .hoverAnimation {
-    @apply  dark:hover:bg-white hover:bg-black duration-100 ease-in-out hover:bg-opacity-10 dark:hover:bg-opacity-10 xl:p-3 rounded-full hover:cursor-pointer
-    w-11 h-11 xl:w-auto xl:h-auto
+  @apply dark:hover:bg-white hover:bg-black duration-100 ease-in-out hover:bg-opacity-10 dark:hover:bg-opacity-10 xl:p-3 rounded-full hover:cursor-pointer
+    w-11 h-11 xl:w-auto xl:h-auto;
 }
 
 .iconAnimation {
-    @apply  hover:bg-[#1d9bf0] hover:bg-opacity-10 
-    rounded-full cursor-pointer w-9 h-9 flex items-center justify-center
+  @apply hover:bg-[#F4AF01] hover:bg-opacity-10 
+    rounded-full cursor-pointer w-9 h-9 flex items-center justify-center;
 }
+
 

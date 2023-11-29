@@ -8,6 +8,7 @@ import TweetInput from "./TweetInput";
 export default function PostFeed({isLoading}) {
   const [tweets, setTweets] = useState([]);
 
+
   useEffect(() => {
     const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {

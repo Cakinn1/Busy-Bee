@@ -18,6 +18,7 @@ import { signOut } from "firebase/auth";
 import Image from "next/image";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import SideBarThemeToggle from "./SideBarThemeToggle";
 
 export default function SideBar() {
   const dispatch = useDispatch();
@@ -29,16 +30,6 @@ export default function SideBar() {
   }
 
   const user = useSelector((state) => state.user);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  const handleToggle = () => {
-    setIsDarkMode((prevState) => !prevState);
-    if (isDarkMode) {
-      document.documentElement.classList.remove("dark");
-    } else {
-      document.documentElement.classList.add("dark");
-    }
-  };
 
   return (
     <div className="hidden sm:flex flex-col fixed h-full md:ml-3 xl:ml-24  ">
@@ -57,10 +48,7 @@ export default function SideBar() {
         <SideBarLink Icon={InboxIcon} text={"Messages"} />
         <SideBarLink Icon={BookmarkIcon} text={"Bookmarks"} />
         <SideBarLink Icon={UserIcon} text={"Profile"} />
-        <SideBarThemeToggle
-          isDarkMode={isDarkMode}
-          handleToggle={handleToggle}
-        />
+        <SideBarThemeToggle />
         <SideBarLink Icon={DotsCircleHorizontalIcon} text={"More"} />
         <button
           className="bg-[#1d9bf0 bg-[#F4AF01] text-black dark:text-white rounded-full h-[52px] w-[200px] font-bold
@@ -98,31 +86,6 @@ function SideBarLink({ text, Icon }) {
       <span className="hidden xl:inline text-black dark:text-white">
         {text}
       </span>
-    </li>
-  );
-}
-
-function SideBarThemeToggle({ handleToggle, isDarkMode }) {
-  return (
-    <li
-      onClick={() => handleToggle()}
-      className="hoverAnimation flex mb-3 xl:justify-start justify-center items-center text-xl space-x-3"
-    >
-      {isDarkMode ? (
-        <>
-          <MoonIcon className="h-7 text-black dark:text-white" />
-          <span className="hidden xl:inline text-black dark:text-white">
-            Light Mode
-          </span>
-        </>
-      ) : (
-        <>
-          <LightBulbIcon className="h-7 text-black dark:text-white" />
-          <span className="hidden xl:inline text-black dark:text-white">
-            Dark Mode
-          </span>
-        </>
-      )}
     </li>
   );
 }

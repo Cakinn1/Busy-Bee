@@ -4,7 +4,9 @@ import {
   CalendarIcon,
   ChartBarIcon,
   EmojiHappyIcon,
+  LightBulbIcon,
   LocationMarkerIcon,
+  MoonIcon,
   PhotographIcon,
   XIcon,
 } from "@heroicons/react/outline";
@@ -18,6 +20,7 @@ import {
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import SideBarThemeToggle from "./SideBarThemeToggle";
 
 export default function TweetInput() {
   const [text, setText] = useState("");
@@ -69,7 +72,7 @@ export default function TweetInput() {
       setImage(e.target.result);
     });
   }
-  // dark:border-gray-700 border-gray-100 border-x dark:border-x
+
   return (
     <div className="flex space-x-3 p-3 border-b border-gray-200 text-black dark:border-gray-700">
       <img
@@ -124,6 +127,7 @@ export default function TweetInput() {
               <Icon Icons={EmojiHappyIcon} />
               <Icon Icons={CalendarIcon} />
               <Icon Icons={LocationMarkerIcon} />
+              <SideBarThemeToggle />
             </div>
             <button
               className="bg-[#F4AF01] text-black  dark:text-white rounded-full px-4 py-1.5
@@ -151,3 +155,18 @@ function Icon({ Icons }) {
     </div>
   );
 }
+
+// function SideBarThemeToggle({ handleToggle, isDarkMode }) {
+//   return (
+//     <div
+//       onClick={() => handleToggle()}
+//       className="hoverAnimation flex justify-center items-center"
+//     >
+//       {isDarkMode ? (
+//         <MoonIcon className="h-[22px]  text-[#F4AF01]" />
+//       ) : (
+//         <LightBulbIcon className="h-[22px]  text-[#F4AF01]" />
+//       )}
+//     </div>
+//   );
+// }

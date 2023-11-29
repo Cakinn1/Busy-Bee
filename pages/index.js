@@ -49,3 +49,5 @@ export default function Home() {
 //fix env file not working, add a way to change mode based on system light/dark mode. (make it a pop up)
 // add toggle feature for lgiht and dark mode on lower breakpoint (iphone)
 // change isLoading to redux later (not need at the moment most likely overkill tbh)
+
+// while loading need to have a skeleton state for imgs (if they are not loaded)

@@ -18,16 +18,16 @@ export default function Home() {
   const username = useSelector((state) => state.user.username);
   const [isLoading, setIsLoading] = useState(true);
 
-  // useEffect(() => {
-  //   if (isLoading) {
-  //     document.body.style.overflow = "hidden";
-  //   } else {
-  //     document.body.style.overflow = "auto";
-  //   }
-  //   setTimeout(() => {
-  //     setIsLoading(false);
-  //   }, 2000);
-  // }, []);
+  useEffect(() => {
+    if (isLoading) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+  }, [isLoading]);
   return (
     <div>
       {isLoading && <Loading />}
@@ -37,13 +37,15 @@ export default function Home() {
        flex"
       >
         <SideBar />
-        <PostFeed />
+        <PostFeed isLoading={isLoading} />
         <Trending />
       </div>
       <CommentModal />
-      {!username && !isLoading && <BottomBanner />}
+      {!username  && <BottomBanner />}
     </div>
   );
 }
 
 //fix env file not working, add a way to change mode based on system light/dark mode. (make it a pop up)
+// add toggle feature for lgiht and dark mode on lower breakpoint (iphone)
+// change isLoading to redux later (not need at the moment most likely overkill tbh)

@@ -16,4 +16,16 @@ body {
     rounded-full cursor-pointer w-9 h-9 flex items-center justify-center;
 }
 
+.animate__fade--out {
+  animation: fadeOut 0.5s ease-in-out;
+}
 
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    z-index: -50;
+  }
+}

@@ -5,7 +5,7 @@ import React from "react";
 export default function Trending() {
   return (
     <div className="hidden  lg:flex flex-col mx-7 mt-4 text-black dark:text-white">
-      <div className="flex  space-x-3 bg-[#EFF3F4] dark:bg-white dark:bg-opacity-10 w-[300px] h-[44px] p-3 rounded-3xl">
+      <div className="flex  space-x-3 bg-[#EFF3F4] dark:bg-white dark:bg-opacity-10 w-[300px w-[380px] h-[44px] p-3 rounded-3xl">
         <SearchIcon className="w-6 text-gray-600" />
         <input
           className="bg-transparent
@@ -14,7 +14,7 @@ export default function Trending() {
           placeholder="Search Busy Bee"
         />
       </div>
-      <div className="w-[300px] min-h-[500px/ maybe add later again? / bg-[#EFF3F4] dark:bg-white dark:bg-opacity-10 rounded-3xl mt-3">
+      <div className="w-[380px] min-h-[500px/ maybe add later again? / bg-[#EFF3F4] dark:bg-white dark:bg-opacity-10 rounded-3xl mt-3">
         <h1 className="font-bold text-xl p-3">What's Happening?</h1>
         <TrendingLinks
           Title="#Next.js > React.js"
@@ -42,7 +42,7 @@ export default function Trending() {
         />
       </div>
 
-      <div className="w-[300px]  bg-[#EFF3F4] dark:bg-white dark:bg-opacity-10 rounded-3xl mt-3">
+      <div className="w-[300px w-[380px]  bg-[#EFF3F4] dark:bg-white dark:bg-opacity-10 rounded-3xl mt-3">
         <h1 className="font-bold text-xl p-3">Who To Follow</h1>
         <WhoToFollow
           ProfilePicture={

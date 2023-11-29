@@ -155,18 +155,3 @@ function Icon({ Icons }) {
     </div>
   );
 }
-
-// function SideBarThemeToggle({ handleToggle, isDarkMode }) {
-//   return (
-//     <div
-//       onClick={() => handleToggle()}
-//       className="hoverAnimation flex justify-center items-center"
-//     >
-//       {isDarkMode ? (
-//         <MoonIcon className="h-[22px]  text-[#F4AF01]" />
-//       ) : (
-//         <LightBulbIcon className="h-[22px]  text-[#F4AF01]" />
-//       )}
-//     </div>
-//   );
-// }

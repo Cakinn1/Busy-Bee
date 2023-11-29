@@ -32,9 +32,9 @@ export default function SideBar() {
   const user = useSelector((state) => state.user);
 
   return (
-    <div className="hidden sm:flex flex-col fixed h-full md:ml-3 xl:ml-24  ">
-      <nav className="h-full relative xl:space-y-1.5">
-        <div className="flex justify-center items-center py-3  xl:p-3 xl:justify-start">
+    <div className="hidden sm:flex flex-col  fixed  h-full md:ml-3  xl:ml-24  ">
+      <nav className="h-full relative xl:space-y-1.5 ">
+        <div className="flex justify-center items-center py-3   xl:p-3 xl:justify-start">
           <Image
             src={"/assets/pfp.webp"}
             className="bg-white dark:bg-black"
@@ -48,7 +48,7 @@ export default function SideBar() {
         <SideBarLink Icon={InboxIcon} text={"Messages"} />
         <SideBarLink Icon={BookmarkIcon} text={"Bookmarks"} />
         <SideBarLink Icon={UserIcon} text={"Profile"} />
-        <SideBarThemeToggle />
+        <SideBarThemeToggle sideBarLink={true} />
         <SideBarLink Icon={DotsCircleHorizontalIcon} text={"More"} />
         <button
           className="bg-[#1d9bf0 bg-[#F4AF01] text-black dark:text-white rounded-full h-[52px] w-[200px] font-bold

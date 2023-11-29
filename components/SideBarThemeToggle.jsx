@@ -2,7 +2,7 @@ import { toggleTheme } from "@/redux/themeSlice";
 import { LightBulbIcon, MoonIcon } from "@heroicons/react/outline";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-export default function SideBarThemeToggle() {
+export default function SideBarThemeToggle({ sideBarLink }) {
   const darkMode = useSelector((state) => state.theme.isDarkMode);
   const dispatch = useDispatch();
 
@@ -17,26 +17,36 @@ export default function SideBarThemeToggle() {
 
   return (
     <>
-      <li
-        onClick={() => handleToggle()}
-        className="hoverAnimation flex mb-3 xl:justify-start justify-center items-center text-xl space-x-3"
-      >
-        {darkMode ? (
-          <>
-            <MoonIcon className="h-7 text-black dark:text-white" />
-            <span className="hidden xl:inline text-black dark:text-white">
-              Light Mode
-            </span>
-          </>
-        ) : (
-          <>
-            <LightBulbIcon className="h-7 text-black dark:text-white" />
-            <span className="hidden xl:inline text-black dark:text-white">
-              Dark Mode
-            </span>
-          </>
-        )}
-      </li>
+      {sideBarLink ? (
+        <li
+          onClick={() => handleToggle()}
+          className="hoverAnimation flex mb-3 xl:justify-start justify-center items-center text-xl space-x-3"
+        >
+          {darkMode ? (
+            <>
+              <MoonIcon className="h-7 text-black dark:text-white" />
+              <span className="hidden xl:inline text-black dark:text-white">
+                Light Mode
+              </span>
+            </>
+          ) : (
+            <>
+              <LightBulbIcon className="h-7 text-black dark:text-white" />
+              <span className="hidden xl:inline text-black dark:text-white">
+                Dark Mode
+              </span>
+            </>
+          )}
+        </li>
+      ) : (
+        <div onClick={() => handleToggle()} className="iconAnimation">
+          {darkMode ? (
+            <MoonIcon className="h-[22px]  text-[#F4AF01]" />
+          ) : (
+            <LightBulbIcon className="h-[22px]  text-[#F4AF01]" />
+          )}
+        </div>
+      )}
     </>
   );
 }

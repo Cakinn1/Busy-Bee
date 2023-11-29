@@ -21,23 +21,23 @@ export default function CommentModal() {
   const user = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
 
-  const router = useRouter()
+  const router = useRouter();
 
- async function sendComment () {
-  const docRef = doc(db, "posts", tweetDetails.id)
-  const commentDetails = {
-    username: user.username, 
-    name: user.name,
-    photoUrl: user.photoUrl,
-    comment: comment
+  async function sendComment() {
+    const docRef = doc(db, "posts", tweetDetails.id);
+    const commentDetails = {
+      username: user.username,
+      name: user.name,
+      photoUrl: user.photoUrl,
+      comment: comment,
+    };
+    await updateDoc(docRef, {
+      comments: arrayUnion(commentDetails),
+    });
+
+    dispatch(closeCommentModal());
+    router.push("/" + tweetDetails.id);
   }
-  await updateDoc(docRef, {
-    comments: arrayUnion(commentDetails)
-  })
-
-  dispatch(closeCommentModal())
-  router.push("/" + tweetDetails.id)
- }
 
   const dispatch = useDispatch();
   return (
@@ -48,7 +48,7 @@ export default function CommentModal() {
         onClose={() => dispatch(closeCommentModal())}
       >
         <div
-          className="w-full h-full bg-black border
+          className="w-full h-full dark:bg-black bg-white border
            border-gray-500 rounded-lg sm:w-[600px] sm:h-[386px] text-white 
         sm:p-10 p-4 relative"
         >
@@ -60,7 +60,7 @@ export default function CommentModal() {
             className="absolute top-4"
             onClick={() => dispatch(closeCommentModal())}
           >
-            <XIcon className="w-6 " />
+            <XIcon className="w-6 text-black dark:text-white" />
           </div>
           <div className="mt-8">
             <div className="flex space-x-3">
@@ -70,13 +70,17 @@ export default function CommentModal() {
               />
               <div>
                 <div className="flex space-x-1.5">
-                  <h1 className="font-bold">{tweetDetails.name}</h1>
+                  <h1 className="font-bold text-black dark:text-white">
+                    {tweetDetails.name}
+                  </h1>
                   <h1 className="text-gray-500">@{tweetDetails.username}</h1>
                 </div>
-                <p className="mt-1">{tweetDetails.tweet}</p>
+                <p className="mt-1 text-black dark:text-white">
+                  {tweetDetails.tweet}
+                </p>
                 <h1 className="text-gray-500 text-[15px] mt-2">
                   Replying to{" "}
-                  <span className="text-[#1b9bf0]">
+                  <span className="text-[#F4AF01]">
                     @{tweetDetails.username}
                   </span>
                 </h1>
@@ -93,36 +97,26 @@ export default function CommentModal() {
               <div className="w-full">
                 <textarea
                   className="w-full
-              bg-transparent resize-none text-lg focus:outline-none"
-                  placeholder="Tweet your reply"
+                  text-black dark:text-white
+                  bg-transparent resize-none text-lg focus:outline-none"
+                  placeholder="Bumble your reply"
                   onChange={(e) => setComment(e.target.value)}
                 />
 
                 <div className="flex justify-between border-t border-gray-700 pt-4">
                   <div className="flex space-x-0">
-                    <div className="iconAnimation">
-                      <PhotographIcon className="h-[22px] text-[#1d9bf0]" />
-                    </div>
-                    <div className="iconAnimation">
-                      <ChartBarIcon className="h-[22px] text-[#1d9bf0]" />
-                    </div>
-                    <div className="iconAnimation">
-                      <EmojiHappyIcon className="h-[22px] text-[#1d9bf0]" />
-                    </div>
-                    <div className="iconAnimation">
-                      <CalendarIcon className="h-[22px] text-[#1d9bf0]" />
-                    </div>
-                    <div className="iconAnimation">
-                      <LocationMarkerIcon className="h-[22px] text-[#1d9bf0]" />
-                    </div>
+                    <Icons Icon={PhotographIcon} />
+                    <Icons Icon={ChartBarIcon} />
+                    <Icons Icon={EmojiHappyIcon} />
+                    <Icons Icon={CalendarIcon} />
+                    <Icons Icon={LocationMarkerIcon} />
                   </div>
-
                   <button
-                    className="bg-[#1d9bf0] rounded-full px-4 py-1.5 disabled:opacity-50"
+                    className="bg-[#F4AF01] text-black dark:text-white rounded-full px-4 py-1.5 disabled:opacity-50"
                     disabled={!comment}
                     onClick={sendComment}
                   >
-                    Tweet
+                    Bumble
                   </button>
                 </div>
               </div>
@@ -131,5 +125,13 @@ export default function CommentModal() {
         </div>
       </Modal>
     </>
+  );
+}
+
+function Icons({ Icon }) {
+  return (
+    <div className="iconAnimation">
+      <Icon className="h-[22px] text-[#F4AF01]" />
+    </div>
   );
 }

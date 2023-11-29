@@ -16,7 +16,6 @@ export default function PostFeed() {
 
     return unsubscribe;
   }, []);
-  // dark:border-gray-700 border-gray-100 border-x dark:border-x
 
   return (
     <div

@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <div>
       <Head>
-      <title>Busy Bee</title>
+        <title>Busy Bee</title>
       </Head>
       {isLoading && <Loading />}
 

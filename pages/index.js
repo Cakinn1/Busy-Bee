@@ -30,6 +30,9 @@ export default function Home() {
   }, [isLoading]);
   return (
     <div>
+      <Head>
+      <title>Busy Bee</title>
+      </Head>
       {isLoading && <Loading />}
 
       <div

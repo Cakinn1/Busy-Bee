@@ -47,7 +47,7 @@ export default function CommentsPage({ tweetData }) {
             <Link href="/">
               <ArrowLeftIcon className="w-7 cursor-pointer" />
             </Link>
-            <h1>Tweet</h1>
+            <h1>Bumble</h1>
           </div>
 
           <div className="dark:border-b border-b border-gray-200 dark:border-gray-700">

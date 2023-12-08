@@ -42,6 +42,6 @@ open http://localhost:3000 to view in the browser.
 
 ### Feedback welcomed
 
-I had a lot of fun building this, and always strive to improve. Any comments or suggestions for imporvement are gratefully received so please feel free to message me via LinkedIn https://www.linkedin.com/in/anthony-cakin/
+I had a lot of fun building this, and always strive to improve. Any comments or suggestions for improvement are gratefully received so please feel free to message me via LinkedIn https://www.linkedin.com/in/anthony-cakin/
 
 

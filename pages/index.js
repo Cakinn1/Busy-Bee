@@ -28,6 +28,11 @@ export default function Home() {
       setIsLoading(false);
     }, 1500);
   }, [isLoading]);
+
+
+  useEffect(() => {
+    window.scrollTo({top: 0, behavior: 'smooth'})
+  }, [])
   return (
     <div>
       <Head>

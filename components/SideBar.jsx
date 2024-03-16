@@ -6,22 +6,21 @@ import {
   HashtagIcon,
   InboxIcon,
   BookmarkIcon,
-  ClipboardListIcon,
   BellIcon,
   UserIcon,
   DotsCircleHorizontalIcon,
   DotsHorizontalIcon,
-  MoonIcon,
-  LightBulbIcon,
 } from "@heroicons/react/outline";
 import { signOut } from "firebase/auth";
 import Image from "next/image";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SideBarThemeToggle from "./SideBarThemeToggle";
+import Link from "next/link";
 
 export default function SideBar() {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
   async function handleSignOut() {
     await signOut(auth);
     dispatch(signOutUser());
@@ -29,7 +28,9 @@ export default function SideBar() {
     dispatch(closeLoginModal());
   }
 
-  const user = useSelector((state) => state.user);
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
   return (
     <div className="hidden sm:flex flex-col  fixed  h-full md:ml-3  xl:ml-24  ">
@@ -43,7 +44,9 @@ export default function SideBar() {
             height={48}
           />
         </div>
-        <SideBarLink Icon={HomeIcon} text={"Home"} />
+        <Link href="/" scroll={false} onClick={scrollToTop}>
+          <SideBarLink Icon={HomeIcon} text={"Home"} />
+        </Link>
         <SideBarLink Icon={HashtagIcon} text={"Explore"} />
         <SideBarLink Icon={BellIcon} text={"Notifications"} />
         <SideBarLink Icon={InboxIcon} text={"Messages"} />

@@ -68,7 +68,6 @@ export default function Tweet({ data, id }) {
     return unsubscribe;
   }, []);
 
-
   return (
     <div
       onClick={() => router.push("/" + id)}
@@ -139,7 +138,6 @@ export default function Tweet({ data, id }) {
         )}
         <ChartBarIcon className="w-5 cursor-not-allowed" />
         <UploadIcon className="w-5 cursor-not-allowed " />
-
       </div>
     </div>
   );
@@ -153,11 +151,12 @@ export function TweetHeader({
   photoUrl,
   image,
 }) {
+  const [imageLoading, setImageLoading] = useState(true);
   return (
     <div className="flex space-x-3 p-3  border-gray-700">
       <img src={photoUrl} className="rounded-full w-11 h-11 object-cover" />
 
-      <div>
+      <div className="flex flex-1 flex-col">
         <div className="flex text-gray-500 items-center space-x-2 mb-1">
           <h1 className="dark:text-white text-black font-bold">{name}</h1>
           <span>@{username}</span>
@@ -166,10 +165,19 @@ export function TweetHeader({
         </div>
         <span className="text-black dark:text-white">{text}</span>
         {image && (
-          <img
-            className="object-cover rounded-md mt-3 max-h-80 border border-gray-700"
-            src={image}
-          />
+          <>
+            {imageLoading ? (
+              <div className="rounded-md  mt-3 w-full h-60 bg-gray-300 animate-pulse"></div>
+            ) : null}
+
+            <img
+              className={`object-cover rounded-md mt-3 max-h-80  ${
+                !imageLoading && "border  border-gray-700"
+              }`}
+              src={image}
+              onLoad={() => setImageLoading(false)}
+            />
+          </>
         )}
       </div>
     </div>

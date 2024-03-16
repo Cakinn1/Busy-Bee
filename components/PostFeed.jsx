@@ -4,17 +4,33 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Tweet from "./Tweet";
 import TweetInput from "./TweetInput";
+import TweetSkeletonLoading from "./TweetSkeletonLoading";
 
 export default function PostFeed({ isLoading }) {
   const [tweets, setTweets] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  async function fetchQuery() {
     const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       setTweets(snapshot.docs);
     });
-
     return unsubscribe;
+  }
+
+  function resolveData() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(fetchQuery());
+      }, 1000);
+    });
+  }
+
+  useEffect(() => {
+    setLoading(true);
+    resolveData().then(() => {
+      setLoading(false);
+    });
   }, []);
 
   return (
@@ -32,9 +48,13 @@ export default function PostFeed({ isLoading }) {
       </div>
 
       <TweetInput />
-      {tweets.map((tweet) => {
-        return <Tweet key={tweet.id} id={tweet.id} data={tweet.data()} />;
-      })}
+      {loading
+        ? new Array(8).fill(0).map((_, index) => {
+            return <TweetSkeletonLoading key={index} />;
+          })
+        : tweets.map((tweet) => {
+            return <Tweet key={tweet.id} id={tweet.id} data={tweet.data()} />;
+          })}
     </div>
   );
 }

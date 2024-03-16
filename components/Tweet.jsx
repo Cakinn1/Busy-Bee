@@ -68,6 +68,7 @@ export default function Tweet({ data, id }) {
     return unsubscribe;
   }, []);
 
+
   return (
     <div
       onClick={() => router.push("/" + id)}
@@ -102,8 +103,20 @@ export default function Tweet({ data, id }) {
             dispatch(openCommentModal());
           }}
         >
-          <ChatIcon className={`w-5 cursor-pointer hover:text-green-400 ${comments?.length > 0 && 'text-black dark:text-white'}`} />
-          {comments?.length > 0 && <span className={`${comments.length > 0 && 'text-black dark:text-white'}`}>{comments.length}</span>}
+          <ChatIcon
+            className={`w-5 cursor-pointer hover:text-green-400 ${
+              comments?.length > 0 && "text-black dark:text-white"
+            }`}
+          />
+          {comments?.length > 0 && (
+            <span
+              className={`${
+                comments.length > 0 && "text-black dark:text-white"
+              }`}
+            >
+              {comments.length}
+            </span>
+          )}
         </div>
         <div
           className="flex justify-center items-center space-x-2"
@@ -126,6 +139,7 @@ export default function Tweet({ data, id }) {
         )}
         <ChartBarIcon className="w-5 cursor-not-allowed" />
         <UploadIcon className="w-5 cursor-not-allowed " />
+
       </div>
     </div>
   );
@@ -151,7 +165,6 @@ export function TweetHeader({
           <Moment fromNow>{timestamp}</Moment>
         </div>
         <span className="text-black dark:text-white">{text}</span>
-
         {image && (
           <img
             className="object-cover rounded-md mt-3 max-h-80 border border-gray-700"

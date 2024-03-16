@@ -2,12 +2,22 @@ import SideBar from "@/components/SideBar";
 import Trending from "@/components/Trending";
 import Tweet from "@/components/Tweet";
 import { ArrowLeftIcon } from "@heroicons/react/outline";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  arrayRemove,
+  arrayUnion,
+  deleteDoc,
+  doc,
+  getDoc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "@/firebase";
 
 import Moment from "react-moment";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
   const id = context.query.id;
@@ -22,6 +32,7 @@ export async function getServerSideProps(context) {
     comments: data.comments || null,
     timestamp: JSON.stringify(data.timestamp.toDate()),
     image: data.image || null,
+    id: id,
   };
   return {
     props: {
@@ -32,6 +43,32 @@ export async function getServerSideProps(context) {
 // dark:border-b border-b border-gray-200 dark:border-gray-700
 export default function CommentsPage({ tweetData }) {
   const user = useSelector((state) => state.user);
+  const router = useRouter();
+  const [comment, setComment] = useState("");
+
+  async function sendComment() {
+    const docRef = doc(db, "posts", tweetData.id);
+    const commentDetails = {
+      username: user.username,
+      name: user.name,
+      photoUrl: user.photoUrl,
+      comment: comment,
+    };
+    await updateDoc(docRef, {
+      comments: arrayUnion(commentDetails),
+    });
+    router.push("/" + tweetData.id);
+    setComment("");
+  }
+
+  // async function deleteComment() {
+  //   const docRef = doc(db, "posts", tweetData.id);
+  //   console.log(user.uid)
+  //   await updateDoc(docRef, {
+  //     comment: arrayRemove(user.uid),
+  //   });
+  // }
+
   return (
     <div>
       <div className="bg-white dark:bg-black min-h-screen dark:text-white text-black  max-w-[1400px] mx-auto flex">
@@ -78,41 +115,48 @@ export default function CommentsPage({ tweetData }) {
             </div>
           </div>
 
-          <div className="flex justify-between items-center  border-b border-gray-200 dark:border-gray-700 p-2">
-            <div className="flex justify-center p-1 space-x-2 items-center ">
+          <div className="flex gap-x-2 items-center  border-b border-gray-200 dark:border-gray-700 p-2">
+            <div className="flex  gap-x-2 justify-center flex-1 p-1 space-x-2 items-center ">
               <img
                 className="h-12 w-12 rounded-full object-cover"
                 src={user.photoUrl}
               />
-              <h1 className="text-2xl text-gray-500 ">Tweet your reply</h1>
+              <textarea
+                wrap="soft"
+                placeholder="Tweet your reply"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                type="text"
+                className="w-full break-words dark:bg-black t dark:text-white focus:outline-none  text-black resize-none"
+              />
             </div>
 
             <button
-              className="bg-[#F4AF01] text-black dark:text-white rounded-full px-4 py-1.5
+              onClick={sendComment}
+              className="bg-[#F4AF01]  hover:brightness-110 duration-300 text-black dark:text-white rounded-full px-4 py-1.5
           disabled:opacity-50"
-              disabled={true}
             >
               Bumble
             </button>
           </div>
 
           {tweetData.comments?.map((comment) => (
-            <div className=" border-b border-gray-200 dark:border-gray-700">
-              <div className="flex space-x-3 p-3  border-gray-700">
+            <div className=" border-b  border-gray-200 dark:border-gray-700">
+              <div className="flex space-x-3 p-3 border-gray-700">
                 <img
                   src={comment.photoUrl}
                   className="rounded-full w-11 h-11 object-cover"
                 />
-
-                <div>
+                <div className="truncate">
                   <div className="flex text-gray-500 items-center space-x-2 mb-1">
                     <h1 className="text-black dark:text-white font-bold">
                       {comment.name}
                     </h1>
                     <span>@{comment.username}</span>
                   </div>
-                  <span>{comment.comment}</span>
+                  <span className="break-words">{comment.comment}</span>
                 </div>
+                {/* <span onClick={deleteComment}>delete</span> */}
               </div>
             </div>
           ))}

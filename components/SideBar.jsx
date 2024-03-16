@@ -37,7 +37,7 @@ export default function SideBar() {
         <div className="flex justify-center items-center py-3   xl:p-3 xl:justify-start">
           <Image
             src={"/assets/pfp.webp"}
-            className="bg-white dark:bg-black"
+            className="bg-white dark:bg-black duration-0"
             width={48}
             height={48}
           />
@@ -58,7 +58,7 @@ export default function SideBar() {
         </button>
         <div
           onClick={handleSignOut}
-          className=" bottom-0 hoverAnimation 
+          className=" bottom-0 imageHoverAnimation lg:ml-0
          cursor-pointer rounded-full absolute flex justify-center items-center space-x-3
          xl:p-3"
         >
@@ -72,7 +72,7 @@ export default function SideBar() {
             </h1>
             <h1 className="text-gray-500">@{user.username}</h1>
           </div>
-          <DotsHorizontalIcon className="h-5 dark:text-white text-black" />
+          <DotsHorizontalIcon className="h-5 dark:text-white text-black hidden" />
         </div>
       </nav>
     </div>

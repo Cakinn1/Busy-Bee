@@ -33,7 +33,6 @@ export default function SignupModal() {
         email,
         password
       );
-
       await updateProfile(auth.currentUser, {
         displayName: name,
         photoURL: `./assets/profilePictures/pfp${Math.ceil(
@@ -49,13 +48,16 @@ export default function SignupModal() {
     }
   }
   async function handleGuestSignIn() {
-    await signInWithEmailAndPassword(auth, "guest12345@gmail.com", "123456");
+    try {
+      await signInWithEmailAndPassword(auth, "guest12345@gmail.com", "123456");
+    } catch (error) {
+      console.error("Error signin in as guest", error);
+    }
   }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (!currentUser) return;
-      console.log(currentUser);
       dispatch(
         setUser({
           username: currentUser.email.split("@")[0],

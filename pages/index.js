@@ -33,10 +33,10 @@ export default function Home() {
       <Head>
         <title>Busy Bee</title>
       </Head>
-      {isLoading && <Loading />}
+      {/* {isLoading && <Loading />} */}
 
       <div
-        className="bg-white dark:bg-black min-h-screen   text-[#E7E9EA] md:justify-cente max-w-[1400px] mx-auto
+        className="bg-white dark:bg-black duration-100 min-h-screen   text-[#E7E9EA] md:justify-cente max-w-[1400px] mx-auto
        flex"
       >
         <SideBar />

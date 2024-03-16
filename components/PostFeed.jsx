@@ -22,7 +22,7 @@ export default function PostFeed({ isLoading }) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(fetchQuery());
-      }, 1000);
+      }, 2000);
     });
   }
 

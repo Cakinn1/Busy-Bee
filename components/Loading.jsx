@@ -3,15 +3,19 @@ import React, { useEffect, useState } from "react";
 import ProgressBar from "@ramonak/react-progress-bar";
 
 export default function Loading() {
-    const [timeoutComplete, setTimeoutComplex] = useState(false)
+  const [timeoutComplete, setTimeoutComplex] = useState(false);
 
-    useEffect(() => {
-        setTimeout(() => {
-            setTimeoutComplex(true)
-        }, 1000);
-    }, [])
+  useEffect(() => {
+    setTimeout(() => {
+      setTimeoutComplex(true);
+    }, 1000);
+  }, []);
   return (
-    <section className={`${timeoutComplete && "animate__fade--out "} absolute w-full z-50 bg-white flex flex-col justify-center items-center min-h-screen`}>
+    <section
+      className={`${
+        timeoutComplete && "animate__fade--out "
+      } absolute w-full z-50 bg-white flex flex-col justify-center items-center min-h-screen`}
+    >
       <figure className="mb-4">
         <Image
           src="/assets/busybee-logo2.webp"

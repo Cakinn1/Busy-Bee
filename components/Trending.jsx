@@ -93,6 +93,7 @@ function WhoToFollow({ Name, ProfilePicture, AccountLink, TwitterLink }) {
     <div className="flex justify-between p-3">
       <div className="flex space-x-3">
         <img
+          alt="user icon"
           src={ProfilePicture}
           className="w-11 h-11 object-cover rounded-full"
         />

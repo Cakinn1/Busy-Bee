@@ -76,6 +76,7 @@ export default function TweetInput() {
   return (
     <div className="flex space-x-3 p-3 border-b border-gray-200 text-black dark:border-gray-700">
       <img
+        alt="user icon"
         src={user.photoUrl || "/assets/pfp.webp"}
         className="rounded-full w-11 h-11 object-cover"
       />
@@ -104,7 +105,7 @@ export default function TweetInput() {
               <img
                 className="rounded-2xl max-h-80 object-contain"
                 src={image}
-                alt=""
+                alt="user picture image"
               />
             </div>
           )}

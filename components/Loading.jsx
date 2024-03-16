@@ -16,7 +16,7 @@ export default function Loading() {
         <Image
           src="/assets/busybee-logo2.webp"
           loading="lazy"
-          alt="Busy Bee image :)"
+          alt="Busy Bee image"
           width="128"
           height="128"
         />

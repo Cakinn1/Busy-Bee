@@ -154,7 +154,7 @@ export function TweetHeader({
   const [imageLoading, setImageLoading] = useState(true);
   return (
     <div className="flex space-x-3 p-3  border-gray-700">
-      <img src={photoUrl} className="rounded-full w-11 h-11 object-cover" />
+      <img alt="user icon" src={photoUrl} className="rounded-full w-11 h-11 object-cover" />
 
       <div className={`${imageLoading && "flex flex-1 flex-col"}`}>
         <div className="flex text-gray-500 items-center space-x-2 mb-1">
@@ -175,6 +175,7 @@ export function TweetHeader({
                 !imageLoading && "border  border-gray-700"
               }`}
               src={image}
+              alt="image picture"
               onLoad={() => setImageLoading(false)}
             />
           </>

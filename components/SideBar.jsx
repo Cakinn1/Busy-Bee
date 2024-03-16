@@ -36,6 +36,7 @@ export default function SideBar() {
       <nav className="h-full relative xl:space-y-1.5 ">
         <div className="flex justify-center items-center py-3   xl:p-3 xl:justify-start">
           <Image
+            alt="user icon"
             src={"/assets/pfp.webp"}
             className="bg-white dark:bg-black duration-0"
             width={48}
@@ -63,6 +64,7 @@ export default function SideBar() {
          xl:p-3"
         >
           <img
+            alt="user icon"
             className="h-10 w-10 rounded-full object-cover"
             src={user.photoUrl || "/assets/kylie.png"}
           />

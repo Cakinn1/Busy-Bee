@@ -90,6 +90,7 @@ export default function CommentsPage({ tweetData }) {
           <div className="dark:border-b border-b border-gray-200 dark:border-gray-700">
             <div className="flex space-x-3 p-3  border-gray-700">
               <img
+                alt="user icon"
                 src={tweetData.photoUrl}
                 className="rounded-full w-11 h-11 object-cover"
               />
@@ -107,6 +108,7 @@ export default function CommentsPage({ tweetData }) {
 
                 {tweetData.image && (
                   <img
+                    alt="user icon"
                     className="object-cover rounded-md mt-3 max-h-80 border border-gray-700"
                     src={tweetData.image}
                   />
@@ -118,6 +120,7 @@ export default function CommentsPage({ tweetData }) {
           <div className="flex gap-x-2 items-center  border-b border-gray-200 dark:border-gray-700 p-2">
             <div className="flex  gap-x-2 justify-center flex-1 p-1 space-x-2 items-center ">
               <img
+                alt="user icon"
                 className="h-12 w-12 rounded-full object-cover"
                 src={user.photoUrl}
               />
@@ -144,6 +147,7 @@ export default function CommentsPage({ tweetData }) {
             <div className=" border-b  border-gray-200 dark:border-gray-700">
               <div className="flex space-x-3 p-3 border-gray-700">
                 <img
+                  alt="user icon"
                   src={comment.photoUrl}
                   className="rounded-full w-11 h-11 object-cover"
                 />

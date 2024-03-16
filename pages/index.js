@@ -40,11 +40,7 @@ export default function Home() {
        flex"
       >
         <SideBar />
-        {/* <div className="flex justify-center w-full"> */}
-
         <PostFeed isLoading={isLoading} />
-        {/* </div> */}
-
         <Trending />
       </div>
       <CommentModal />

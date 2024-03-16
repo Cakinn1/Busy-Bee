@@ -156,7 +156,7 @@ export function TweetHeader({
     <div className="flex space-x-3 p-3  border-gray-700">
       <img src={photoUrl} className="rounded-full w-11 h-11 object-cover" />
 
-      <div className="flex flex-1 flex-col">
+      <div className={`${imageLoading && "flex flex-1 flex-col"}`}>
         <div className="flex text-gray-500 items-center space-x-2 mb-1">
           <h1 className="dark:text-white text-black font-bold">{name}</h1>
           <span>@{username}</span>

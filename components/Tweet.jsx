@@ -10,14 +10,19 @@ import {
   HeartIcon,
   TrashIcon,
   UploadIcon,
+  BadgeCheckIcon,
 } from "@heroicons/react/outline";
 import { HeartIcon as FilledHeartIcon } from "@heroicons/react/solid";
 import {
   arrayRemove,
   arrayUnion,
+  collection,
   deleteDoc,
   doc,
+  getDoc,
+  getDocs,
   onSnapshot,
+  query,
   updateDoc,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
@@ -32,7 +37,7 @@ export default function Tweet({ data, id }) {
   const user = useSelector((state) => state.user);
   const [likes, setLikes] = useState([]);
   const [comments, setComments] = useState([]);
-
+  const [badge, setBadge] = useState("");
   async function likeComment(e) {
     e.stopPropagation();
 
@@ -59,10 +64,10 @@ export default function Tweet({ data, id }) {
 
   useEffect(() => {
     if (!id) return;
-
     const unsubscribe = onSnapshot(doc(db, "posts", id), (doc) => {
       setLikes(doc.data()?.likes);
       setComments(doc.data()?.comments);
+      setBadge(doc.data()?.badge);
     });
 
     return unsubscribe;
@@ -88,6 +93,7 @@ export default function Tweet({ data, id }) {
         text={data?.tweet}
         photoUrl={data?.photoUrl}
         image={data?.image}
+        badge={badge}
       />
       <div className="p-3 ml-16 text-gray-500 flex space-x-14">
         <div
@@ -158,6 +164,7 @@ export function TweetHeader({
   text,
   photoUrl,
   image,
+  badge,
 }) {
   const [imageLoading, setImageLoading] = useState(true);
   return (
@@ -171,6 +178,7 @@ export function TweetHeader({
       <div className={`${imageLoading && "flex flex-1 flex-col"}`}>
         <div className="flex text-gray-500 items-center space-x-2 mb-1">
           <h1 className="dark:text-white text-black font-bold">{name}</h1>
+          {badge && <BadgeCheckIcon className="w-6 h-6 text-blue-500" />}
           <span>@{username}</span>
           <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
           <Moment fromNow>{timestamp}</Moment>

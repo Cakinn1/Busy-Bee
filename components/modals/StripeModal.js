@@ -38,9 +38,12 @@ export default function StripeModal() {
   }
 
   function subscribeToPlan() {
-    loadCheckout(selectedPlan?.prices[0].id);
-    setIsBilingLoading(true);
     handleUserBadge();
+    setIsBilingLoading(true);
+    // needs set timeout to have database get changed then this occurs
+    setTimeout(() => {
+      loadCheckout(selectedPlan?.prices[0].id);
+    }, 30000);
   }
 
   async function handleUserBadge() {
@@ -80,7 +83,6 @@ export default function StripeModal() {
         className="bg-white flex flex-col relative  w-[600px] p-6 h-[600px] rounded-md"
         onClick={(e) => e.stopPropagation()}
       >
-        <button onClick={handleUserBadge}>done</button>
         <XIcon
           onClick={() => dispatch(closeStripModal())}
           className="h-7 duration-300 cursor-pointer active:scale-90 hover:scale-125 absolute w-7"

@@ -1,4 +1,4 @@
-import { db, storage } from "@/firebase";
+import { db, storage } from "@/lib/firebase";
 import { openLoginModal } from "@/redux/modalSlice";
 import {
   CalendarIcon,
@@ -37,7 +37,7 @@ export default function TweetInput() {
     }
 
     setLoading(true);
-
+    // add preimun within here to give user the badge
     const docRef = await addDoc(collection(db, "posts"), {
       username: user.username,
       name: user.name,
@@ -46,6 +46,7 @@ export default function TweetInput() {
       timestamp: serverTimestamp(),
       likes: [],
       tweet: text,
+      badge: "",
     });
 
     if (image) {

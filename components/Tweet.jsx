@@ -1,4 +1,4 @@
-import { db } from "@/firebase";
+import { db } from "@/lib/firebase";
 import {
   openCommentModal,
   openLoginModal,
@@ -68,9 +68,17 @@ export default function Tweet({ data, id }) {
     return unsubscribe;
   }, []);
 
+  function validateUser() {
+    if (!user.username) {
+      dispatch(openLoginModal());
+      return;
+    }
+    router.push("/" + id);
+  }
+
   return (
     <div
-      onClick={() => router.push("/" + id)}
+      onClick={validateUser}
       className="dark:border-b border-b border-gray-200 dark:border-gray-700 cursor-pointer"
     >
       <TweetHeader
@@ -154,7 +162,11 @@ export function TweetHeader({
   const [imageLoading, setImageLoading] = useState(true);
   return (
     <div className="flex space-x-3 p-3  border-gray-700">
-      <img alt="user icon" src={photoUrl} className="rounded-full w-11 h-11 object-cover" />
+      <img
+        alt="user icon"
+        src={photoUrl}
+        className="rounded-full w-11 h-11 object-cover"
+      />
 
       <div className={`${imageLoading && "flex flex-1 flex-col"}`}>
         <div className="flex text-gray-500 items-center space-x-2 mb-1">

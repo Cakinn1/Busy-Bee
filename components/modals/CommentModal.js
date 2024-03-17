@@ -1,4 +1,4 @@
-import { db } from "@/firebase";
+import { db } from "@/lib/firebase";
 import { closeCommentModal } from "@/redux/modalSlice";
 import {
   CalendarIcon,
@@ -65,7 +65,7 @@ export default function CommentModal() {
           <div className="mt-8">
             <div className="flex space-x-3">
               <img
-              alt="user icon"
+                alt="user icon"
                 className="rounded-full h-12 w-12 object-cover"
                 src={tweetDetails.photoUrl}
               />
@@ -92,7 +92,7 @@ export default function CommentModal() {
           <div className="mt-11">
             <div className="flex space-x-3">
               <img
-              alt="user icon"
+                alt="user icon"
                 className="rounded-full h-12 w-12 object-cover"
                 src={userImg}
               />

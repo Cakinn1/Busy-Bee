@@ -11,7 +11,7 @@ import {
   onSnapshot,
   updateDoc,
 } from "firebase/firestore";
-import { db } from "@/firebase";
+import { db } from "@/lib/firebase";
 
 import Moment from "react-moment";
 import Link from "next/link";
@@ -61,13 +61,6 @@ export default function CommentsPage({ tweetData }) {
     setComment("");
   }
 
-  // async function deleteComment() {
-  //   const docRef = doc(db, "posts", tweetData.id);
-  //   console.log(user.uid)
-  //   await updateDoc(docRef, {
-  //     comment: arrayRemove(user.uid),
-  //   });
-  // }
 
   return (
     <div>

@@ -10,11 +10,12 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { auth } from "@/firebase";
+import { auth, db } from "@/lib/firebase";
 import { current } from "@reduxjs/toolkit";
 import { setUser } from "@/redux/userSlice";
 import { useRouter } from "next/router";
 import { EyeIcon, EyeOffIcon, XIcon } from "@heroicons/react/outline";
+import { addDoc, collection } from "firebase/firestore";
 
 export default function SignupModal() {
   const [email, setEmail] = useState("");
@@ -39,6 +40,16 @@ export default function SignupModal() {
           Math.random() * 6
         )}.png`,
       });
+
+      // await addDoc(collection(db, "users"), {
+      //   username: user.email.split("@")[0],
+      //   name: user.displayName,
+      //   email: user.email,
+      //   uid: user.uid,
+      //   photoUrl: user.photoURL,
+      //   badge: "",
+      // });
+
       router.reload();
     } catch (error) {
       setError(true);
@@ -56,8 +67,16 @@ export default function SignupModal() {
   }
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (!currentUser) return;
+      await addDoc(collection(db, "users"), {
+        username: currentUser.email.split("@")[0],
+        name: currentUser.displayName,
+        email: currentUser.email,
+        uid: currentUser.uid,
+        photoUrl: currentUser.photoURL,
+        badge: "",
+      });
       dispatch(
         setUser({
           username: currentUser.email.split("@")[0],

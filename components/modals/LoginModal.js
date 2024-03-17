@@ -4,7 +4,7 @@ import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { closeLoginModal, openLoginModal } from "@/redux/modalSlice";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/firebase";
+import { auth } from "@/lib/firebase";
 import { EyeIcon, EyeOffIcon, XIcon } from "@heroicons/react/outline";
 export default function LoginModal() {
   const [email, setEmail] = useState("");

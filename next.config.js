@@ -1,6 +1,6 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-}
+const withTM = require("next-transpile-modules")([
+  "@stripe/firestore-stripe-payments",
+]);
 
-module.exports = nextConfig
+module.exports = withTM({ reactStrictMode: true });
+

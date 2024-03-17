@@ -1,5 +1,11 @@
-import { auth } from "@/firebase";
-import { closeLoginModal, closeSignupModal } from "@/redux/modalSlice";
+import { auth, db } from "@/lib/firebase";
+import {
+  closeLoginModal,
+  closeSignupModal,
+  openLoginModal,
+  openSignupModal,
+  openStripModal,
+} from "@/redux/modalSlice";
 import { signOutUser } from "@/redux/userSlice";
 import {
   HomeIcon,
@@ -11,12 +17,14 @@ import {
   DotsCircleHorizontalIcon,
   DotsHorizontalIcon,
 } from "@heroicons/react/outline";
+import { RiTwitterXFill } from "react-icons/ri";
 import { signOut } from "firebase/auth";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SideBarThemeToggle from "./SideBarThemeToggle";
 import Link from "next/link";
+import { doc, updateDoc } from "firebase/firestore";
 
 export default function SideBar() {
   const dispatch = useDispatch();
@@ -47,6 +55,7 @@ export default function SideBar() {
         <Link href="/" scroll={false} onClick={scrollToTop}>
           <SideBarLink Icon={HomeIcon} text={"Home"} />
         </Link>
+        <SideBarLink Icon={RiTwitterXFill} text={"Get Premium+"} />
         <SideBarLink Icon={HashtagIcon} text={"Explore"} />
         <SideBarLink Icon={BellIcon} text={"Notifications"} />
         <SideBarLink Icon={InboxIcon} text={"Messages"} />
@@ -85,12 +94,32 @@ export default function SideBar() {
 }
 
 function SideBarLink({ text, Icon }) {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+
+  function handleStripeModal() {
+    if (!user.username) {
+      dispatch(openLoginModal());
+    } else if (text === "Get Premium+") {
+      console.log(user.uid);
+      dispatch(openStripModal());
+    }
+  }
+
   return (
-    <li className="hoverAnimation flex mb-3 xl:justify-start justify-center items-center text-xl space-x-3">
+    <li
+      onClick={handleStripeModal}
+      className="hoverAnimation flex mb-3 xl:justify-start justify-center items-center text-xl space-x-3"
+    >
       <Icon className="h-7 text-black dark:text-white" />
       <span className="hidden xl:inline text-black dark:text-white">
         {text}
       </span>
+      {text === "Get Premium+" && (
+        <span className="bg-blue-600 text-[10px] font-semibold px-2 rounded-md text-white">
+          New
+        </span>
+      )}
     </li>
   );
 }

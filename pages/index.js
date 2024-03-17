@@ -1,7 +1,5 @@
 import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "@next/font/google";
-import styles from "@/styles/Home.module.css";
 import SideBar from "@/components/SideBar";
 import PostFeed from "@/components/PostFeed";
 import Trending from "@/components/Trending";
@@ -10,7 +8,9 @@ import { useSelector } from "react-redux";
 import CommentModal from "@/components/modals/CommentModal";
 import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
-require("dotenv").config();
+import payments, { loadCheckout } from "../lib/stripe";
+import { getProducts } from "@stripe/firestore-stripe-payments";
+import StripeModal from "@/components/modals/StripeModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,16 +29,18 @@ export default function Home() {
     }, 1500);
   }, [isLoading]);
 
+  const subscription = false;
+  // if (subscription === null) return null;
 
-  useEffect(() => {
-    window.scrollTo({top: 0, behavior: 'smooth'})
-  }, [])
+  // if(!subscription) return <div>plans</div>
+
   return (
     <div>
       <Head>
         <title>Busy Bee</title>
       </Head>
       {isLoading && <Loading />}
+  
 
       <div
         className="bg-white dark:bg-black duration-100 min-h-screen   text-[#E7E9EA] md:justify-cente max-w-[1400px] mx-auto
@@ -49,6 +51,7 @@ export default function Home() {
         <Trending />
       </div>
       <CommentModal />
+      <StripeModal />
       {!username && <BottomBanner />}
     </div>
   );

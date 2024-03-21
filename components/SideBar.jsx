@@ -98,7 +98,7 @@ function SideBarLink({ text, Icon }) {
   const user = useSelector((state) => state.user);
 
   function handleStripeModal() {
-    if (!user.username) {
+    if (!user.username && text === "Get Premium+") {
       dispatch(openLoginModal());
     } else if (text === "Get Premium+") {
       console.log(user.uid);

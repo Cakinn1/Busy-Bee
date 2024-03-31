@@ -39,7 +39,7 @@ export default function SideBarThemeToggle({ sideBarLink }) {
           )}
         </li>
       ) : (
-        <div onClick={() => handleToggle()} className="iconAnimation">
+        <div onClick={handleToggle} className="iconAnimation">
           {darkMode ? (
             <MoonIcon className="h-[22px]  text-[#F4AF01]" />
           ) : (

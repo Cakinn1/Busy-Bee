@@ -3,11 +3,11 @@ import React, { useEffect, useState } from "react";
 import ProgressBar from "@ramonak/react-progress-bar";
 
 export default function Loading() {
-  const [timeoutComplete, setTimeoutComplex] = useState(false);
+  const [timeoutComplete, setTimeoutComplete] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
-      setTimeoutComplex(true);
+      setTimeoutComplete(true);
     }, 1000);
   }, []);
   return (

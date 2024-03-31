@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import SideBarThemeToggle from "./SideBarThemeToggle";
 import Link from "next/link";
 import { doc, updateDoc } from "firebase/firestore";
+import { useRouter } from "next/router";
 
 export default function SideBar() {
   const dispatch = useDispatch();
@@ -96,15 +97,18 @@ export default function SideBar() {
 function SideBarLink({ text, Icon }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-
+  const stripeModal = useSelector((state) => state.modals.stripeModeOpen);
   function handleStripeModal() {
     if (!user.username && text === "Get Premium+") {
       dispatch(openLoginModal());
     } else if (text === "Get Premium+") {
-      console.log(user.uid);
       dispatch(openStripModal());
     }
   }
+
+  // useEffect(() => {
+  //   console.log(stripeModal);
+  // }, [stripeModal]);
 
   return (
     <li
@@ -116,7 +120,7 @@ function SideBarLink({ text, Icon }) {
         {text}
       </span>
       {text === "Get Premium+" && (
-        <span className="bg-blue-600 text-[10px] font-semibold px-2 rounded-md text-white">
+        <span className="bg-blue-600 hidden xl:inline text-[10px] font-semibold px-2 rounded-md text-white">
           New
         </span>
       )}

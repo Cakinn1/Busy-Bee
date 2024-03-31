@@ -81,7 +81,6 @@ export default function Tweet({ data, id }) {
     router.push("/" + id);
   }
 
-  console.log("nice");
 
   return (
     <div

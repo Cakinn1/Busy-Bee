@@ -29,18 +29,12 @@ export default function Home() {
     }, 1500);
   }, [isLoading]);
 
-  const subscription = false;
-  // if (subscription === null) return null;
-
-  // if(!subscription) return <div>plans</div>
-
   return (
     <div>
       <Head>
         <title>Busy Bee</title>
       </Head>
       {isLoading && <Loading />}
-  
 
       <div
         className="bg-white dark:bg-black duration-100 min-h-screen   text-[#E7E9EA] md:justify-cente max-w-[1400px] mx-auto

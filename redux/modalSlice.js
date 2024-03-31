@@ -43,7 +43,6 @@ const modalSlice = createSlice({
     openStripModal: (state) => {
       state.stripeModeOpen = true;
     },
-
     setCommentTweet: (state, action) => {
       state.commentTweetDetails.username = action.payload.username;
       state.commentTweetDetails.name = action.payload.name;

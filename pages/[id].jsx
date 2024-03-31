@@ -1,7 +1,7 @@
 import SideBar from "@/components/SideBar";
 import Trending from "@/components/Trending";
 import Tweet from "@/components/Tweet";
-import { ArrowLeftIcon } from "@heroicons/react/outline";
+import { ArrowLeftIcon, TrashIcon } from "@heroicons/react/outline";
 import {
   arrayRemove,
   arrayUnion,
@@ -15,9 +15,10 @@ import { db } from "@/lib/firebase";
 
 import Moment from "react-moment";
 import Link from "next/link";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { openLoginModal } from "@/redux/modalSlice";
 
 export async function getServerSideProps(context) {
   const id = context.query.id;
@@ -40,9 +41,9 @@ export async function getServerSideProps(context) {
     },
   };
 }
-// dark:border-b border-b border-gray-200 dark:border-gray-700
 export default function CommentsPage({ tweetData }) {
   const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const router = useRouter();
   const [comment, setComment] = useState("");
 
@@ -61,6 +62,30 @@ export default function CommentsPage({ tweetData }) {
     setComment("");
   }
 
+  async function deleteComment(currentComment) {
+    const docRef = doc(db, "posts", tweetData.id);
+    const updatedComments = tweetData.comments.filter((comment) => {
+      return comment.comment !== currentComment;
+    });
+    await updateDoc(docRef, {
+      comments: updatedComments,
+    });
+    router.push("/" + tweetData.id);
+  }
+
+  function userSignedOut() {
+    router.push("/");
+    const modalTimer = setTimeout(() => {
+      dispatch(openLoginModal());
+    }, 2000);
+    return () => clearTimeout(modalTimer);
+  }
+
+  useEffect(() => {
+    if (!user.username) {
+      userSignedOut();
+    }
+  }, [user]);
 
   return (
     <div>
@@ -135,31 +160,44 @@ export default function CommentsPage({ tweetData }) {
               Bumble
             </button>
           </div>
-
           {tweetData.comments?.map((comment) => (
-            <div className=" border-b  border-gray-200 dark:border-gray-700">
-              <div className="flex space-x-3 p-3 border-gray-700">
-                <img
-                  alt="user icon"
-                  src={comment.photoUrl}
-                  className="rounded-full w-11 h-11 object-cover"
-                />
-                <div className="truncate">
-                  <div className="flex text-gray-500 items-center space-x-2 mb-1">
-                    <h1 className="text-black dark:text-white font-bold">
-                      {comment.name}
-                    </h1>
-                    <span>@{comment.username}</span>
-                  </div>
-                  <span className="break-words">{comment.comment}</span>
-                </div>
-                {/* <span onClick={deleteComment}>delete</span> */}
-              </div>
-            </div>
+            <TweetComment comment={comment} deleteComment={deleteComment} />
           ))}
         </div>
-
         <Trending />
+      </div>
+    </div>
+  );
+}
+
+function TweetComment({ comment, deleteComment }) {
+  const user = useSelector((state) => state.user);
+  return (
+    <div className=" border-b  border-gray-200 dark:border-gray-700">
+      <div className="flex space-x-3 p-3 flex-1 relative border-gray-700">
+        <img
+          alt="user icon"
+          src={comment.photoUrl}
+          className="rounded-full w-11 h-11 object-cover"
+        />
+        <div className="truncate">
+          <div className="flex text-gray-500 items-center space-x-2 mb-1">
+            <h1 className="text-black dark:text-white font-bold">
+              {comment.name}
+            </h1>
+            <span>@{comment.username}</span>
+          </div>
+          <span className="break-words">{comment.comment}</span>
+        </div>
+
+        {user.username === comment.username && (
+          <div>
+            <TrashIcon
+              onClick={() => deleteComment(comment.comment)}
+              className="w-5 cursor-pointer absolute duration-200 right-4 hover:text-red-600"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

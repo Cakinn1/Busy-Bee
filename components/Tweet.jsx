@@ -81,6 +81,8 @@ export default function Tweet({ data, id }) {
     router.push("/" + id);
   }
 
+  console.log("nice");
+
   return (
     <div
       onClick={validateUser}
@@ -189,7 +191,6 @@ export function TweetHeader({
             {imageLoading ? (
               <div className="rounded-md  mt-3 w-full h-60 bg-gray-300 animate-pulse"></div>
             ) : null}
-
             <img
               className={`object-cover rounded-md mt-3 max-h-80  ${
                 !imageLoading && "border  border-gray-700"

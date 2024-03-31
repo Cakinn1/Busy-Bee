@@ -11,26 +11,25 @@ export default function PostFeed({ isLoading }) {
   const [loading, setLoading] = useState(false);
 
   async function fetchQuery() {
-    const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      setTweets(snapshot.docs);
-    });
-    return unsubscribe;
-  }
-
-  function resolveData() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(fetchQuery());
-      }, 2000);
-    });
+    try {
+      setLoading(true);
+      // Simulate loading state effect
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        setTweets(snapshot.docs);
+        setLoading(false);
+      });
+      return unsubscribe;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+      throw error;
+    }
   }
 
   useEffect(() => {
-    setLoading(true);
-    resolveData().then(() => {
-      setLoading(false);
-    });
+    fetchQuery();
   }, []);
 
   return (
@@ -46,7 +45,6 @@ export default function PostFeed({ isLoading }) {
       >
         Home
       </div>
-
       <TweetInput />
       {loading
         ? new Array(8).fill(0).map((_, index) => {

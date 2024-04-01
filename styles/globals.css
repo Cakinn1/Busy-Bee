@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-white dark:bg-black duration-300;
+  @apply bg-white dark:bg-black duration-100;
 }
 
 .hoverAnimation {

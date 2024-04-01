@@ -97,7 +97,6 @@ export default function SideBar() {
 function SideBarLink({ text, Icon }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  const stripeModal = useSelector((state) => state.modals.stripeModeOpen);
   function handleStripeModal() {
     if (!user.username && text === "Get Premium+") {
       dispatch(openLoginModal());
@@ -105,10 +104,6 @@ function SideBarLink({ text, Icon }) {
       dispatch(openStripModal());
     }
   }
-
-  // useEffect(() => {
-  //   console.log(stripeModal);
-  // }, [stripeModal]);
 
   return (
     <li

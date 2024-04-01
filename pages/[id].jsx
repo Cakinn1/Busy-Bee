@@ -160,8 +160,8 @@ export default function CommentsPage({ tweetData }) {
               Bumble
             </button>
           </div>
-          {tweetData.comments?.map((comment) => (
-            <TweetComment comment={comment} deleteComment={deleteComment} />
+          {tweetData.comments?.map((comment, idx) => (
+            <TweetComment comment={comment} key={idx} deleteComment={deleteComment} />
           ))}
         </div>
         <Trending />

@@ -48,6 +48,7 @@ export default function TweetInput() {
       likes: [],
       tweet: text,
       badge: "",
+      bookmark: []
     });
 
     if (image) {
@@ -89,69 +90,73 @@ export default function TweetInput() {
         className="rounded-full w-11 h-11 object-cover"
       />
 
-      {loading && <h1 className="text-2xl text-gray-500">Uploading post...</h1>}
-      {!loading && (
-        <div className="w-full">
+      <div className="w-full">
+        {loading ? (
+          <h1 className="text-2xl text-gray-500 pt-1 pb-4">
+            Uploading post...
+          </h1>
+        ) : (
           <textarea
             className="bg-transparent dark:text-white resize-none outline-none w-full min-h-[50px] text-lg"
             placeholder="What's on your mind?"
             onChange={(e) => setText(e.target.value)}
             value={text}
           />
+        )}
 
-          {image && (
-            <div className="relative mb-4">
-              <div
-                className="absolute top-1 left-1 
+        {image && (
+          <div className="relative mb-4">
+            <div
+              className="absolute top-1 left-1 
             bg-[#272c26] rounded-full w-8 h-8 flex justify-center
             items-center cursor-pointer hover:bg-white hover:bg-opacity-10"
-                onClick={() => setImage(null)}
-              >
-                <XIcon className="h-5" />
-              </div>
-
-              <img
-                className="rounded-2xl max-h-80 object-contain"
-                src={image}
-                alt="user picture image"
-              />
-            </div>
-          )}
-
-          <div className="flex justify-between dark:border-t border-t border-gray-200 dark:border-gray-700 pt-4">
-            <div className="flex space-x-0">
-              <div
-                className={`iconAnimation`}
-                onClick={() =>
-                  filerPickerRef.current && filerPickerRef.current.click()
-                }
-              >
-                <Icon Icons={PhotographIcon} />
-              </div>
-              <input
-                className="hidden"
-                type="file"
-                ref={filerPickerRef}
-                onChange={addImageToTweet}
-              />
-              <Icon Icons={ChartBarIcon} />
-              <Icon Icons={EmojiHappyIcon} />
-              <Icon Icons={CalendarIcon} />
-              <Icon Icons={LocationMarkerIcon} />
-              <SideBarThemeToggle />
-            </div>
-            <button
-              className="bg-[#F4AF01] text-black  dark:text-white rounded-full px-4 py-1.5
-              disabled:opacity-50"
-              // uid not loading when on this button in db
-              onClick={sendTweet}
-              disabled={!text && !image}
+              onClick={() => setImage(null)}
             >
-              Bumble
-            </button>
+              <XIcon className="h-5" />
+            </div>
+
+            <img
+              className="rounded-2xl max-h-80 object-contain"
+              src={image}
+              alt="user picture image"
+            />
           </div>
+        )}
+
+        <div className="flex justify-between dark:border-t border-t border-gray-200 dark:border-gray-700 pt-4">
+          <div className="flex space-x-0">
+            <div
+              className={`iconAnimation`}
+              onClick={() =>
+                filerPickerRef.current && filerPickerRef.current.click()
+              }
+            >
+              <Icon Icons={PhotographIcon} />
+            </div>
+            <input
+              disabled={loading}
+              className="hidden"
+              type="file"
+              ref={filerPickerRef}
+              onChange={addImageToTweet}
+            />
+            <Icon Icons={ChartBarIcon} />
+            <Icon Icons={EmojiHappyIcon} />
+            <Icon Icons={CalendarIcon} />
+            <Icon Icons={LocationMarkerIcon} />
+            <SideBarThemeToggle />
+          </div>
+          <button
+            className="bg-[#F4AF01] text-black  dark:text-white rounded-full px-4 py-1.5
+              disabled:opacity-50"
+            // uid not loading when on this button in db
+            onClick={sendTweet}
+            disabled={!text && !image}
+          >
+            Bumble
+          </button>
         </div>
-      )}
+      </div>
     </div>
   );
 }

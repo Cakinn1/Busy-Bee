@@ -18,7 +18,7 @@ export interface DataProps {
   badge?: string;
   image?: string;
   comments?: CommentsProps[] | [];
-  bookmark?: string;
+  bookmark?: string[] | [];
   likes: string[] | [];
   name: string;
   photoUrl: string;
@@ -36,7 +36,7 @@ export interface CommentsProps {
 }
 
 export default function PostFeed({ isLoading }: { isLoading: boolean }) {
-  const [tweets, setTweets] = useState<QueryDocumentSnapshot[]>([]);
+  const [tweets, setTweets] = useState<DocumentData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const { feed } = useContext(feedContext);
   async function fetchQuery() {
@@ -45,21 +45,23 @@ export default function PostFeed({ isLoading }: { isLoading: boolean }) {
       // Simulate loading state effect
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      const collectionName = feed === "tweets" ? "posts" : "bookmark";
-
       const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
       const unsubscribe = onSnapshot(q, (snapshot) => {
         setLoading(false);
-        // console.log(snapshot.docs);
-        // const data = snapshot.docs.map((item) => item.data());
-        setTweets(snapshot.docs);
+        // all data needed for firestore
+        const data = snapshot.docs.map((item) => ({
+          id: item.id,
+          data: item.data(),
+        }));
 
-        // if (feed === "tweets") {
-        //   setTweets(data);
-        // } else {
-        //   const t = data?.filter((item) => item?.bookmark?.length > 0);
-        //   setTweets(data)
-        // }
+        if (feed === "tweets") {
+          setTweets(data);
+        } else {
+          const bookmarkedTweets = data?.filter(
+            (item) => item.data.bookmark && item?.data?.bookmark?.length > 0
+          );
+          setTweets(bookmarkedTweets);
+        }
       });
       return unsubscribe;
     } catch (error) {
@@ -87,30 +89,45 @@ export default function PostFeed({ isLoading }: { isLoading: boolean }) {
         Home
       </div>
       <TweetInput />
-      {loading
-        ? new Array(8).fill(0).map((_, index) => {
-            return <TweetSkeletonLoading key={index} />;
-          })
-        : tweets.map((tweet) => {
-            const documentData = tweet.data();
+      {loading ? (
+        new Array(8).fill(0).map((_, index) => {
+          return <TweetSkeletonLoading key={index} />;
+        })
+      ) : tweets.length > 0 ? (
+        tweets.map((tweet) => {
+          const tweetData: DataProps = {
+            likes: tweet.data.likes || [],
+            image: tweet.data.image || "",
+            comments: tweet.data.comments || [],
+            badge: tweet.data.badge || "",
+            bookmark: tweet.data.bookmark || [],
+            name: tweet.data.name,
+            photoUrl: tweet.data.photoUrl,
+            timestamp: (
+              <Moment fromNow>{tweet.data.timestamp?.toDate()}</Moment>
+            ),
+            tweet: tweet.data.tweet,
+            uid: tweet.data.uid,
+            username: tweet.data.username,
+          };
+          return <Tweet key={tweet.id} id={tweet.id} data={tweetData} />;
+        })
+      ) : (
+        <NothingBookmarked />
+      )}
+    </div>
+  );
+}
 
-            const tweetData: DataProps = {
-              likes: documentData.likes || [],
-              image: documentData.image || "",
-              comments: documentData.comments || [],
-              badge: documentData.badge || "",
-              bookmark: documentData.bookmark || "",
-              name: documentData.name,
-              photoUrl: documentData.photoUrl,
-              timestamp: (
-                <Moment fromNow>{documentData.timestamp?.toDate()}</Moment>
-              ),
-              tweet: documentData.tweet,
-              uid: documentData.uid,
-              username: documentData.username,
-            };
-            return <Tweet key={tweet.id} id={tweet.id} data={tweetData} />;
-          })}
+function NothingBookmarked() {
+  return (
+    <div className="items-center p-4 space-y-2 flex flex-col text-black justify-center  ">
+      <h1 className="font-bold text-3xl lg:text-4xl ">
+        You have nothing book marked
+      </h1>
+      <h2 className="text-sm md:text-base">
+        Add something to bookmarks by clicking on bookmark icon.
+      </h2>
     </div>
   );
 }

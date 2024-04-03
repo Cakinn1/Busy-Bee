@@ -55,6 +55,12 @@ export default function Home() {
     </>
   );
 }
-
-// add a way to change mode based on system light/dark mode. (make it a pop up)
-// fix image color on dark mode
+// TODO: 1. Implement a modal/pop up to change dark mode/lightmode theme based on users system color
+// TODO: 2. Find a better image for "busy Bee" on dark mode
+// TODO: 3. Add unit test within application
+// TODO: 4. Insert "bookmark" into all post database
+// TODO: 5. Fix premium/stripe payment system
+// TODO: 6. Fix premium UI modal
+// TODO: 7. Add messaging into application
+// TODO: 8. Add social profiles into application basically a mini instagram clone
+// TODO: 9. Make bookmarks private for the selected user 

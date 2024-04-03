@@ -2,6 +2,7 @@ import { auth } from "@/lib/firebase";
 import {
   closeLoginModal,
   closeSignupModal,
+  openCommentModal,
   openLoginModal,
   openStripModal,
 } from "@/redux/modalSlice";
@@ -42,6 +43,13 @@ export default function SideBar() {
     setFeed("tweets");
   }
 
+  function handleButton() {
+    if (!user.username) {
+      dispatch(openLoginModal());
+      return;
+    }
+  }
+
   return (
     <div className="hidden sm:flex flex-col  fixed  h-full md:ml-3  xl:ml-24  ">
       <nav className="h-full relative xl:space-y-1.5 ">
@@ -68,8 +76,9 @@ export default function SideBar() {
         <SideBarThemeToggle sideBarLink={true} />
         <SideBarLink Icon={DotsCircleHorizontalIcon} text={"More"} />
         <button
-          className="bg-[#1d9bf0 bg-[#F4AF01] text-black dark:text-white rounded-full h-[52px] w-[200px] font-bold
-         text-lg mt-2 xl:inline hidden"
+          className="bg-[#1d9bf0 hover:opacity-70 duration-200 bg-[#F4AF01] text-black dark:text-white rounded-full h-[52px] w-[200px] font-bold
+         text-lg mt-2 xl:inline hidden cursor-not-allowed"
+          onClick={handleButton}
         >
           Bumble
         </button>
@@ -125,7 +134,7 @@ function SideBarLink({ text, Icon }: SideBarLinkProps) {
         {text}
       </span>
       {text === "Get Premium+" && (
-        <span className="bg-blue-600 hidden xl:inline text-[10px] font-semibold px-2 rounded-md text-white">
+        <span className="bg-[#F4AF01] hidden xl:inline text-[10px] font-semibold px-2 rounded-md text-white">
           New
         </span>
       )}

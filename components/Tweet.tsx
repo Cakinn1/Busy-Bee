@@ -30,6 +30,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCommentTweet } from "@/redux/commentSlice";
 import { RootState } from "@/redux/store";
 import { CommentsProps, DataProps } from "./PostFeed";
+import { FaBookmark } from "react-icons/fa6";
 
 interface TweetHeaderProps {
   username: string;
@@ -84,7 +85,6 @@ export default function Tweet({ data, id }: TweetProps) {
       setComments(doc.data()?.comments);
       setBadge(doc.data()?.badge);
       setBookmark(doc.data()?.bookmark);
-      // console.log(doc.data())
     });
 
     return unsubscribe;
@@ -159,7 +159,7 @@ export default function Tweet({ data, id }: TweetProps) {
           onClick={(e: React.MouseEvent) => sendCommment(e)}
         >
           <ChatIcon
-            className={`w-5 cursor-pointer hover:text-green-400 ${
+            className={`w-4 md:w-5 cursor-pointer hover:text-green-400 ${
               comments?.length > 0 && "text-black dark:text-white"
             }`}
           />
@@ -179,25 +179,29 @@ export default function Tweet({ data, id }: TweetProps) {
           onClick={(e: React.MouseEvent) => likeComment(e)}
         >
           {user.uid && likes.includes(user.uid) ? (
-            <FilledHeartIcon className="w-5 text-pink-500" />
+            <FilledHeartIcon className="w-4 md:w-5 text-pink-500" />
           ) : (
-            <HeartIcon className="w-5 cursor-pointer hover:text-pink-500" />
+            <HeartIcon className="w-4 md:w-5 cursor-pointer hover:text-pink-500" />
           )}
-          {likes.length > 0 && <span>{likes.length}</span>}
+          {likes.length > 0 && <span className="text-sm">{likes.length}</span>}
         </div>
         {user.uid === data?.uid && (
           <div
             className="cursor-pointer hover:text-red-600"
             onClick={(e: React.MouseEvent) => deleteTweet(e)}
           >
-            <TrashIcon className="w-5" />
+            <TrashIcon className="w-4 md:w-5" />
           </div>
         )}
-        <ChartBarIcon className="w-5 cursor-not-allowed" />
+        {/* <ChartBarIcon className="w-4 md:w-5 cursor-not-allowed" /> */}
         <div onClick={(e: React.MouseEvent) => addBookmark(e)}>
-          <BookmarkIcon className="w-5 cursor-not-allowed" />
+          {user.uid && bookmark?.includes(user.uid) ? (
+            <FaBookmark className="w-4  md:w-5" />
+          ) : (
+            <BookmarkIcon className="w-4 md:w-5" />
+          )}
         </div>
-        <UploadIcon className="w-5 cursor-not-allowed " />
+        <UploadIcon className="w-4 md:w-5 cursor-not-allowed " />
       </div>
     </div>
   );

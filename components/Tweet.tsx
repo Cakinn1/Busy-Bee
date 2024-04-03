@@ -25,12 +25,14 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCommentTweet } from "@/redux/commentSlice";
 import { RootState } from "@/redux/store";
 import { CommentsProps, DataProps } from "./PostFeed";
 import { FaBookmark } from "react-icons/fa6";
+import { progressContext } from "@/context/ProgressContext";
+import { resolve } from "path";
 
 interface TweetHeaderProps {
   username: string;
@@ -50,6 +52,7 @@ export default function Tweet({ data, id }: TweetProps) {
   const dispatch = useDispatch();
   const router = useRouter();
   const user = useSelector((state: RootState) => state.user);
+  const { setProgress } = useContext(progressContext);
   const [likes, setLikes] = useState<string[]>([]);
   const [comments, setComments] = useState<CommentsProps[]>([]);
   const [badge, setBadge] = useState<string>("");
@@ -90,12 +93,23 @@ export default function Tweet({ data, id }: TweetProps) {
     return unsubscribe;
   }, []);
 
-  function validateUser() {
+  async function validateUser() {
     if (!user.username) {
       dispatch(openLoginModal());
       return;
     }
-    router.push("/" + id);
+
+    try {
+      setProgress(10);
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      router.push("/" + id);
+    } catch (error) {
+      console.error(error, "error has occured routing to comment");
+      setProgress(0);
+      return;
+    } finally {
+      setProgress(100);
+    }
   }
 
   function sendCommment(e: React.MouseEvent) {
@@ -118,14 +132,10 @@ export default function Tweet({ data, id }: TweetProps) {
 
   async function addBookmark(e: React.MouseEvent) {
     e.stopPropagation();
-
     if (!user.uid) {
       dispatch(openLoginModal());
       return;
     }
-
-    console.log("bookmark", bookmark);
-    console.log("user.uid:", user.uid);
 
     if (bookmark.includes(user.uid)) {
       await updateDoc(doc(db, "posts", id), {
@@ -196,9 +206,9 @@ export default function Tweet({ data, id }: TweetProps) {
         {/* <ChartBarIcon className="w-4 md:w-5 cursor-not-allowed" /> */}
         <div onClick={(e: React.MouseEvent) => addBookmark(e)}>
           {user.uid && bookmark?.includes(user.uid) ? (
-            <FaBookmark className="w-4  md:w-5" />
+            <FaBookmark className="w-4 md:w-5" />
           ) : (
-            <BookmarkIcon className="w-4 md:w-5" />
+            <BookmarkIcon className="w-4 md:w-5  duration-200 hover:text-gray-800" />
           )}
         </div>
         <UploadIcon className="w-4 md:w-5 cursor-not-allowed " />

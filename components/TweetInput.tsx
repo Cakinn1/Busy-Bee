@@ -18,15 +18,17 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
-import { ReactElement, useRef, useState } from "react";
+import { ReactElement, useContext, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SideBarThemeToggle from "./SideBarThemeToggle";
 import { RootState } from "@/redux/store";
+import { progressContext } from "@/context/ProgressContext";
 
 export default function TweetInput() {
   const [text, setText] = useState<string>("");
   const [image, setImage] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const { setProgress } = useContext(progressContext);
 
   const filerPickerRef = useRef<HTMLInputElement>(null);
   const user = useSelector((state: RootState) => state.user);
@@ -36,33 +38,39 @@ export default function TweetInput() {
       dispatch(openLoginModal());
       return;
     }
-
-    setLoading(true);
-    // add preimun within here to give user the badge
-    const docRef = await addDoc(collection(db, "posts"), {
-      username: user.username,
-      name: user.name,
-      photoUrl: user.photoUrl,
-      uid: user.uid,
-      timestamp: serverTimestamp(),
-      likes: [],
-      tweet: text,
-      badge: "",
-      bookmark: []
-    });
-
-    if (image) {
-      const imageRef = ref(storage, `tweetImages/${docRef.id}`);
-      const uploadImage = await uploadString(imageRef, image, "data_url");
-      const downloadURL = await getDownloadURL(imageRef);
-      await updateDoc(doc(db, "posts", docRef.id), {
-        image: downloadURL,
+    setProgress(10);
+    try {
+      setLoading(true);
+      // add preimun within here to give user the badge
+      const docRef = await addDoc(collection(db, "posts"), {
+        username: user.username,
+        name: user.name,
+        photoUrl: user.photoUrl,
+        uid: user.uid,
+        timestamp: serverTimestamp(),
+        likes: [],
+        tweet: text,
+        badge: "",
+        bookmark: [],
       });
-    }
 
-    setText("");
-    setImage(null);
-    setLoading(false);
+      if (image) {
+        const imageRef = ref(storage, `tweetImages/${docRef.id}`);
+        const uploadImage = await uploadString(imageRef, image, "data_url");
+        const downloadURL = await getDownloadURL(imageRef);
+        await updateDoc(doc(db, "posts", docRef.id), {
+          image: downloadURL,
+        });
+      }
+
+      setText("");
+      setImage(null);
+      setLoading(false);
+    } catch (error) {
+      console.error(error, "error sending tweet");
+    } finally {
+      setProgress(100);
+    }
   }
 
   function addImageToTweet(e: React.ChangeEvent<HTMLInputElement>) {
@@ -108,11 +116,11 @@ export default function TweetInput() {
           <div className="relative mb-4">
             <div
               className="absolute top-1 left-1 
-            bg-[#272c26] rounded-full w-8 h-8 flex justify-center
-            items-center cursor-pointer hover:bg-white hover:bg-opacity-10"
+            bg-[#272c26]  rounded-full w-8 h-8 flex justify-center
+            items-center cursor-pointer dark:bg-white duration-200  dark:hover:bg-black hover:bg-white hover:bg-opacity-10"
               onClick={() => setImage(null)}
             >
-              <XIcon className="h-5" />
+              <XIcon className="h-5 text-white dark:text-black duration-200 hover:text-black dark:hover:text-white" />
             </div>
 
             <img

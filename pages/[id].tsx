@@ -115,7 +115,6 @@ export default function CommentsPage({
     }
   }, [user]);
 
-
   return (
     <div>
       <div className="bg-white dark:bg-black min-h-screen dark:text-white text-black  max-w-[1400px] mx-auto flex">
@@ -183,6 +182,7 @@ export default function CommentsPage({
               onClick={sendComment}
               className="bg-[#F4AF01]  hover:brightness-110 duration-300 text-black dark:text-white rounded-full px-4 py-1.5
           disabled:opacity-50"
+              disabled={comment.length <= 0}
             >
               Bumble
             </button>

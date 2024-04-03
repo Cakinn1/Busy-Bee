@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { EyeIcon, EyeOffIcon, XIcon } from "@heroicons/react/outline";
 import { addDoc, collection } from "firebase/firestore";
 import { RootState } from "@/redux/store";
+import { progressContext } from "@/context/ProgressContext";
 
 export default function SignupModal() {
   const [email, setEmail] = useState<string>("");
@@ -29,20 +30,17 @@ export default function SignupModal() {
   );
   const dispatch = useDispatch();
   const router = useRouter();
+  const { setProgress } = useContext(progressContext);
 
   async function handleSignUp() {
+    setProgress(10);
     try {
-      if (!auth.currentUser) {
-        return console.log("Current user does not exist");
-      }
-      //
       const userCredentials = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
-      //
-      await updateProfile(auth.currentUser, {
+      await updateProfile(auth.currentUser!, {
         displayName: name,
         photoURL: `./assets/profilePictures/pfp${Math.ceil(
           Math.random() * 6
@@ -54,13 +52,20 @@ export default function SignupModal() {
       setTimeout(() => {
         setError(false);
       }, 4000);
+      setProgress(0);
+    } finally {
+      setProgress(100);
     }
   }
   async function handleGuestSignIn() {
+    setProgress(10);
     try {
       await signInWithEmailAndPassword(auth, "guest12345@gmail.com", "123456");
     } catch (error) {
       console.error("Error signin in as guest", error);
+      setProgress(0);
+    } finally {
+      setProgress(100);
     }
   }
 

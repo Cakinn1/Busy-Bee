@@ -14,7 +14,7 @@ export default function Trending() {
           placeholder="Search Busy Bee"
         />
       </div>
-      <div className="w-[380px] min-h-[500px/ maybe add later again? / bg-[#EFF3F4] dark:bg-white dark:bg-opacity-10 rounded-3xl mt-3">
+      <div className="w-[380px] min-h-[500px/ maybe add later again? / bg-[#EFF3F4] dark:bg-white  dark:bg-opacity-10 rounded-3xl mt-3">
         <h1 className="font-bold text-xl p-3">What's Happening?</h1>
         <TrendingLinks
           Title="#Next.js > React.js"
@@ -88,10 +88,10 @@ function TrendingLinks({
 }: TrendingLinksProps) {
   return (
     <div className="p-3 relative">
-      <DotsHorizontalIcon className="w-5 text-gray-600 absolute right-4" />
+      <DotsHorizontalIcon className="w-5 text-gray-600 cursor-not-allowed rounded-full absolute right-4 duration-200 hover:bg-gray-300" />
       <p className="text-xs text-gray-500">Trending in {Trending}</p>
       <h1 className="text-[15px] font-bold">
-        <a href={Link} target="_blank">
+        <a href={Link} className="duration-200 hover:opacity-70" target="_blank">
           {Title}
         </a>
       </h1>
@@ -123,7 +123,7 @@ function WhoToFollow({
         />
         <div>
           <div className="flex space-x-1 ">
-            <h1 className="font-bold ">{Name}</h1>
+            <h1 className="font-bold">{Name}</h1>
             <BadgeCheckIcon className="w-[18px]  text-blue-400 " />
           </div>
           <h1 className="text-[12px] text-gray-500 mt-1">
@@ -133,7 +133,7 @@ function WhoToFollow({
           </h1>
         </div>
       </div>
-      <button className="dark:bg-white bg-black text-white dark:text-black text-sm w-20 rounded-3xl font-bold h-8 ">
+      <button className="dark:bg-white duration-200 hover:opacity-70 cursor-not-allowed bg-black text-white dark:text-black text-sm w-20 rounded-3xl font-bold h-8 ">
         Follow
       </button>
     </div>

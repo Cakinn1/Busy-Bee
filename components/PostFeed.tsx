@@ -13,6 +13,8 @@ import TweetInput from "./TweetInput";
 import TweetSkeletonLoading from "./TweetSkeletonLoading";
 import Moment from "react-moment";
 import { feedContext } from "@/context/FeedContext";
+import LoadingBar from "react-top-loading-bar";
+import { progressContext } from "@/context/ProgressContext";
 
 export interface DataProps {
   badge?: string;
@@ -39,7 +41,9 @@ export default function PostFeed({ isLoading }: { isLoading: boolean }) {
   const [tweets, setTweets] = useState<DocumentData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const { feed } = useContext(feedContext);
+  const { setProgress, progress } = useContext(progressContext);
   async function fetchQuery() {
+    setProgress(10);
     try {
       setLoading(true);
       // Simulate loading state effect
@@ -68,6 +72,8 @@ export default function PostFeed({ isLoading }: { isLoading: boolean }) {
       console.error("Error fetching data:", error);
       setLoading(false);
       throw error;
+    } finally {
+      setProgress(100);
     }
   }
 
@@ -75,11 +81,19 @@ export default function PostFeed({ isLoading }: { isLoading: boolean }) {
     fetchQuery();
   }, [feed]);
 
+
+
   return (
     <div
       className="sm:ml-16  xl:ml-[350px] max-w-2xl flex-grow
      dark:border-gray-700 border-gray-200 border-x dark:border-x"
     >
+      <LoadingBar
+        color="#F4AF01"
+        height={4}
+        progress={progress}
+        onLoaderFinished={() => setProgress(0)}
+      />
       <div
         className={`px-3 py-2 text-lg sm:text-xl font-bold
        backdrop-blur-sm  border-b dark:border-b dark:border-gray-700 text-black dark:text-white sticky top-0 ${

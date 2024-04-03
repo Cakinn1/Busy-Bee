@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/outline";
 import { HeartIcon as FilledHeartIcon } from "@heroicons/react/solid";
 import {
+  DocumentData,
   arrayRemove,
   arrayUnion,
   collection,
@@ -27,30 +28,25 @@ import Moment from "react-moment";
 import { useDispatch, useSelector } from "react-redux";
 import { setCommentTweet } from "@/redux/commentSlice";
 import { RootState } from "@/redux/store";
+import { CommentsProps, DataProps } from "./PostFeed";
 
-interface TweetProps {
-  id: string | null;
-  data: DataProps;
+interface TweetHeaderProps {
+  username: string;
+  name: string;
+  timestamp: string;
+  text: string;
+  photoUrl: string;
+  image: string | undefined;
+  badge: string | undefined;
 }
 
-interface DataProps {
-  likes: string[] | [];
-  name: string | null;
-  photoUrl: string | null;
-  timestamp: null | { seconds: number; nanoseconds: number };
-  tweet: string | null;
-  uid: string | null;
-  username: string | null;
-}
-
-export default function Tweet({ data, id }: any) {
+export default function Tweet({ data, id }: { data: DataProps; id: string }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const user = useSelector((state: RootState) => state.user);
   const [likes, setLikes] = useState<string[]>([]);
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState<CommentsProps[]>([]);
   const [badge, setBadge] = useState<string>("");
-  console.log(likes);
 
   async function likeComment(e: React.MouseEvent) {
     e.stopPropagation();
@@ -106,26 +102,27 @@ export default function Tweet({ data, id }: any) {
         tweet: data?.tweet,
         photoUrl: data?.photoUrl,
         name: data?.name,
-        username: data?.username,
+        username: data.username,
       })
     );
     dispatch(openCommentModal());
   }
 
+  const tweetData: TweetHeaderProps = {
+    username: data.username,
+    name: data?.name,
+    timestamp: data?.timestamp,
+    text: data?.tweet,
+    photoUrl: data?.photoUrl,
+    image: data?.image,
+    badge: badge,
+  };
   return (
     <div
       onClick={validateUser}
       className="dark:border-b border-b border-gray-200 dark:border-gray-700 cursor-pointer"
     >
-      <TweetHeader
-        username={data?.username}
-        name={data?.name}
-        timestamp={data?.timestamp?.toDate()}
-        text={data?.tweet}
-        photoUrl={data?.photoUrl}
-        image={data?.image}
-        badge={badge}
-      />
+      <TweetHeader tweetData={tweetData} />
       <div className="p-3 ml-16 text-gray-500 flex space-x-14">
         <div
           className="flex justify-center items-center space-x-2"
@@ -172,44 +169,30 @@ export default function Tweet({ data, id }: any) {
   );
 }
 
-interface TweetHeaderProps {
-  username: string;
-  name: string;
-  timestamp: string;
-  text: string;
-  photoUrl: string;
-  image: string;
-  badge: string;
-}
-
-export function TweetHeader({
-  username,
-  name,
-  timestamp,
-  text,
-  photoUrl,
-  image,
-  badge,
-}: TweetHeaderProps) {
+export function TweetHeader({ tweetData }: { tweetData: TweetHeaderProps }) {
   const [imageLoading, setImageLoading] = useState<boolean>(true);
   return (
     <div className="flex space-x-3 p-3  border-gray-700">
       <img
         alt="user icon"
-        src={photoUrl}
+        src={tweetData.photoUrl}
         className="rounded-full w-11 h-11 object-cover"
       />
 
       <div className={`${imageLoading && "flex flex-1 flex-col"}`}>
         <div className="flex text-gray-500 items-center space-x-2 mb-1">
-          <h1 className="dark:text-white text-black font-bold">{name}</h1>
-          {badge && <BadgeCheckIcon className="w-6 h-6 text-blue-500" />}
-          <span>@{username}</span>
+          <h1 className="dark:text-white text-black font-bold">
+            {tweetData.name}
+          </h1>
+          {tweetData.badge && (
+            <BadgeCheckIcon className="w-6 h-6 text-blue-500" />
+          )}
+          <span>@{tweetData.username}</span>
           <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
-          <Moment fromNow>{timestamp}</Moment>
+          <Moment fromNow>{tweetData.timestamp}</Moment>
         </div>
-        <span className="text-black dark:text-white">{text}</span>
-        {image && (
+        <span className="text-black dark:text-white">{tweetData.text}</span>
+        {tweetData.image && (
           <>
             {imageLoading ? (
               <div className="rounded-md  mt-3 w-full h-60 bg-gray-300 animate-pulse"></div>
@@ -218,7 +201,7 @@ export function TweetHeader({
               className={`object-cover rounded-md mt-3 max-h-80  ${
                 !imageLoading && "border  border-gray-700"
               }`}
-              src={image}
+              src={tweetData.image}
               alt="image picture"
               onLoad={() => setImageLoading(false)}
             />

@@ -11,6 +11,27 @@ import { useEffect, useState } from "react";
 import Tweet from "./Tweet";
 import TweetInput from "./TweetInput";
 import TweetSkeletonLoading from "./TweetSkeletonLoading";
+import { StringFormat } from "firebase/storage";
+
+export interface DataProps {
+  badge?: string;
+  image?: string;
+  comments?: CommentsProps[] | [];
+  likes: string[] | [];
+  name: string;
+  photoUrl: string;
+  timestamp: string;
+  tweet: string;
+  uid: string;
+  username: string;
+}
+
+export interface CommentsProps {
+  comment: string;
+  name: string;
+  photoUrl: string;
+  username: string;
+}
 
 export default function PostFeed({ isLoading }: { isLoading: boolean }) {
   const [tweets, setTweets] = useState<QueryDocumentSnapshot[]>([]);
@@ -56,7 +77,20 @@ export default function PostFeed({ isLoading }: { isLoading: boolean }) {
             return <TweetSkeletonLoading key={index} />;
           })
         : tweets.map((tweet) => {
-            return <Tweet key={tweet.id} id={tweet.id} data={tweet.data()} />;
+            const documentData = tweet.data();
+            const tweetData: DataProps = {
+              likes: documentData.likes || [],
+              image: documentData.image || "",
+              comments: documentData.comments || [],
+              badge: documentData.badge || "",
+              name: documentData.names,
+              photoUrl: documentData.photoUrl,
+              timestamp: documentData.timestamp.toDate(),
+              tweet: documentData.tweet,
+              uid: documentData.uid,
+              username: documentData.username,
+            };
+            return <Tweet key={tweet.id} id={tweet.id} data={tweetData} />;
           })}
     </div>
   );

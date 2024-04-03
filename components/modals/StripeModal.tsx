@@ -16,13 +16,16 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { RootState } from "@/redux/store";
+
+
 export default function StripeModal() {
-  const isOpen = useSelector((state) => state.modals.stripeModeOpen);
-  const user = useSelector((state) => state.user);
+  const isOpen = useSelector((state: RootState) => state.modals.stripeModeOpen);
+  const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
-  const [product, setProduct] = useState([]);
-  const [selectedPlan, setSelectedPlan] = useState(null);
-  const [isBilingLoading, setIsBilingLoading] = useState(false);
+  const [product, setProduct] = useState<any[]>([]);
+  const [selectedPlan, setSelectedPlan] = useState<any | null>(null);
+  const [isBilingLoading, setIsBilingLoading] = useState<boolean>(false);
 
   async function getStripeProducts() {
     try {
@@ -33,7 +36,7 @@ export default function StripeModal() {
       setProduct(products);
       setSelectedPlan(products[2]);
     } catch (error) {
-      console.error("error", error.message);
+      console.error("error has occured getting stripe products");
     }
   }
 
@@ -126,7 +129,14 @@ export default function StripeModal() {
   );
 }
 
-function Plan({ value, text, setSelectedPlan, selectedPlan }) {
+interface PlanProps {
+  text: string;
+  selectedPlan: any;
+  setSelectedPlan: any;
+  value: any;
+}
+
+function Plan({ value, text, setSelectedPlan, selectedPlan }: PlanProps) {
   const isSelected = text === selectedPlan?.name;
   return (
     <>

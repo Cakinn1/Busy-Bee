@@ -1,6 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+interface InitialStateProps {
+  username: null | string;
+  name: null | string;
+  email: null | string;
+  uid: null | string;
+  photoUrl: null | string;
+  badge: null | string;
+}
+
+const initialState: InitialStateProps = {
   username: null,
   name: null,
   email: null,

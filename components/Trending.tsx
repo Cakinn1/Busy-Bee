@@ -73,7 +73,19 @@ export default function Trending() {
   );
 }
 
-function TrendingLinks({ Trending, Title, TweetNumbers, Link }) {
+interface TrendingLinksProps {
+  Trending: string;
+  TweetNumbers: string;
+  Title: string;
+  Link: string;
+}
+
+function TrendingLinks({
+  Trending,
+  Title,
+  TweetNumbers,
+  Link,
+}: TrendingLinksProps) {
   return (
     <div className="p-3 relative">
       <DotsHorizontalIcon className="w-5 text-gray-600 absolute right-4" />
@@ -88,7 +100,19 @@ function TrendingLinks({ Trending, Title, TweetNumbers, Link }) {
   );
 }
 
-function WhoToFollow({ Name, ProfilePicture, AccountLink, TwitterLink }) {
+interface WhoToFollowProps {
+  Name: string;
+  ProfilePicture: string;
+  AccountLink: string;
+  TwitterLink: string;
+}
+
+function WhoToFollow({
+  Name,
+  ProfilePicture,
+  AccountLink,
+  TwitterLink,
+}: WhoToFollowProps) {
   return (
     <div className="flex justify-between p-3">
       <div className="flex space-x-3">

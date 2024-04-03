@@ -1,9 +1,5 @@
 import { db } from "@/lib/firebase";
-import {
-  openCommentModal,
-  openLoginModal,
-  setCommentTweet,
-} from "@/redux/modalSlice";
+import { openCommentModal, openLoginModal } from "@/redux/modalSlice";
 import {
   ChartBarIcon,
   ChatIcon,
@@ -29,19 +25,36 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Moment from "react-moment";
 import { useDispatch, useSelector } from "react-redux";
+import { setCommentTweet } from "@/redux/commentSlice";
+import { RootState } from "@/redux/store";
 
-export default function Tweet({ data, id }) {
+interface TweetProps {
+  id: string | null;
+  data: DataProps;
+}
+
+interface DataProps {
+  likes: string[] | [];
+  name: string | null;
+  photoUrl: string | null;
+  timestamp: null | { seconds: number; nanoseconds: number };
+  tweet: string | null;
+  uid: string | null;
+  username: string | null;
+}
+
+export default function Tweet({ data, id }: any) {
   const dispatch = useDispatch();
-
   const router = useRouter();
-  const user = useSelector((state) => state.user);
-  const [likes, setLikes] = useState([]);
+  const user = useSelector((state: RootState) => state.user);
+  const [likes, setLikes] = useState<string[]>([]);
   const [comments, setComments] = useState([]);
-  const [badge, setBadge] = useState("");
-  async function likeComment(e) {
-    e.stopPropagation();
+  const [badge, setBadge] = useState<string>("");
+  console.log(likes);
 
-    if (!user.username) {
+  async function likeComment(e: React.MouseEvent) {
+    e.stopPropagation();
+    if (!user.username || !user.uid) {
       dispatch(openLoginModal());
       return;
     }
@@ -57,7 +70,7 @@ export default function Tweet({ data, id }) {
     }
   }
 
-  async function deleteTweet(e) {
+  async function deleteTweet(e: React.MouseEvent) {
     e.stopPropagation();
     await deleteDoc(doc(db, "posts", id));
   }
@@ -81,6 +94,23 @@ export default function Tweet({ data, id }) {
     router.push("/" + id);
   }
 
+  function sendCommment(e: React.MouseEvent) {
+    e.stopPropagation();
+    if (!user.username) {
+      dispatch(openLoginModal());
+      return;
+    }
+    dispatch(
+      setCommentTweet({
+        id: id,
+        tweet: data?.tweet,
+        photoUrl: data?.photoUrl,
+        name: data?.name,
+        username: data?.username,
+      })
+    );
+    dispatch(openCommentModal());
+  }
 
   return (
     <div
@@ -99,23 +129,7 @@ export default function Tweet({ data, id }) {
       <div className="p-3 ml-16 text-gray-500 flex space-x-14">
         <div
           className="flex justify-center items-center space-x-2"
-          onClick={(e) => {
-            e.stopPropagation();
-            if (!user.username) {
-              dispatch(openLoginModal());
-              return;
-            }
-            dispatch(
-              setCommentTweet({
-                id: id,
-                tweet: data?.tweet,
-                photoUrl: data?.photoUrl,
-                name: data?.name,
-                username: data?.username,
-              })
-            );
-            dispatch(openCommentModal());
-          }}
+          onClick={(e: React.MouseEvent) => sendCommment(e)}
         >
           <ChatIcon
             className={`w-5 cursor-pointer hover:text-green-400 ${
@@ -134,9 +148,9 @@ export default function Tweet({ data, id }) {
         </div>
         <div
           className="flex justify-center items-center space-x-2"
-          onClick={likeComment}
+          onClick={(e: React.MouseEvent) => likeComment(e)}
         >
-          {likes.includes(user.uid) ? (
+          {user.uid && likes.includes(user.uid) ? (
             <FilledHeartIcon className="w-5 text-pink-500" />
           ) : (
             <HeartIcon className="w-5 cursor-pointer hover:text-pink-500" />
@@ -158,6 +172,16 @@ export default function Tweet({ data, id }) {
   );
 }
 
+interface TweetHeaderProps {
+  username: string;
+  name: string;
+  timestamp: string;
+  text: string;
+  photoUrl: string;
+  image: string;
+  badge: string;
+}
+
 export function TweetHeader({
   username,
   name,
@@ -166,8 +190,8 @@ export function TweetHeader({
   photoUrl,
   image,
   badge,
-}) {
-  const [imageLoading, setImageLoading] = useState(true);
+}: TweetHeaderProps) {
+  const [imageLoading, setImageLoading] = useState<boolean>(true);
   return (
     <div className="flex space-x-3 p-3  border-gray-700">
       <img

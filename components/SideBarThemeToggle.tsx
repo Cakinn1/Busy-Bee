@@ -1,9 +1,14 @@
+import { RootState } from "@/redux/store";
 import { toggleTheme } from "@/redux/themeSlice";
 import { LightBulbIcon, MoonIcon } from "@heroicons/react/outline";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-export default function SideBarThemeToggle({ sideBarLink }) {
-  const darkMode = useSelector((state) => state.theme.isDarkMode);
+
+interface Props {
+  sideBarLink?: boolean;
+}
+export default function SideBarThemeToggle({ sideBarLink }: Props) {
+  const darkMode = useSelector((state: RootState) => state.theme.isDarkMode);
   const dispatch = useDispatch();
 
   const handleToggle = () => {

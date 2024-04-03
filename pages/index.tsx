@@ -11,12 +11,14 @@ import Loading from "@/components/Loading";
 import payments, { loadCheckout } from "../lib/stripe";
 import { getProducts } from "@stripe/firestore-stripe-payments";
 import StripeModal from "@/components/modals/StripeModal";
+import React from "react";
+import { RootState } from "@/redux/store";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const username = useSelector((state) => state.user.username);
-  const [isLoading, setIsLoading] = useState(true);
+  const username = useSelector((state: RootState) => state.user.username);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (isLoading) {
@@ -30,7 +32,7 @@ export default function Home() {
   }, [isLoading]);
 
   return (
-    <div>
+    <>
       <Head>
         <title>Busy Bee</title>
       </Head>
@@ -47,7 +49,7 @@ export default function Home() {
       <CommentModal />
       <StripeModal />
       {!username && <BottomBanner />}
-    </div>
+    </>
   );
 }
 

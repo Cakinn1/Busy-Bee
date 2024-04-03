@@ -6,11 +6,12 @@ import { closeLoginModal, openLoginModal } from "@/redux/modalSlice";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { EyeIcon, EyeOffIcon, XIcon } from "@heroicons/react/outline";
+import { RootState } from "@/redux/store";
 export default function LoginModal() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [type, setType] = useState("");
-  const isOpen = useSelector((state) => state.modals.loginModalOpen);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [type, setType] = useState<string>("");
+  const isOpen = useSelector((state: RootState) => state.modals.loginModalOpen);
   const dispatch = useDispatch();
 
   async function handleSignIn() {
@@ -51,6 +52,7 @@ export default function LoginModal() {
               onClick={setEmail}
               type={"email"}
               placeholder={"Email"}
+              setType={setType}
             />
             <div className="relative">
               <HandleInput
@@ -73,7 +75,19 @@ export default function LoginModal() {
   );
 }
 
-function HandleInput({ onClick, placeholder, type, setType }) {
+interface HandleInputProps {
+  onClick: (value: string) => void;
+  placeholder: string;
+  type: string;
+  setType: (value: string) => void;
+}
+
+function HandleInput({
+  onClick,
+  placeholder,
+  type,
+  setType,
+}: HandleInputProps) {
   return (
     <>
       <input
@@ -106,7 +120,11 @@ function HandleInput({ onClick, placeholder, type, setType }) {
   );
 }
 
-function HandleButton({ onClick, text }) {
+interface HandleButtonProps {
+  onClick: () => void;
+  text: string;
+}
+function HandleButton({ onClick, text }: HandleButtonProps) {
   return (
     <button
       className="bg-[#F4AF01] text-white  w-full font-bold text-lg rounded-md p-2 mt-4"

@@ -131,7 +131,6 @@ export default function Tweet({ data, id }: TweetProps) {
       await updateDoc(doc(db, "posts", id), {
         bookmark: arrayRemove(user.uid),
       });
-      x;
     } else {
       await updateDoc(doc(db, "posts", id), {
         bookmark: arrayUnion(user.uid),

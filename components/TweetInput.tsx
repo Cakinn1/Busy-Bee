@@ -18,17 +18,18 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
-import { useRef, useState } from "react";
+import { ReactElement, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SideBarThemeToggle from "./SideBarThemeToggle";
+import { RootState } from "@/redux/store";
 
 export default function TweetInput() {
-  const [text, setText] = useState("");
-  const [image, setImage] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [text, setText] = useState<string>("");
+  const [image, setImage] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const filerPickerRef = useRef(null);
-  const user = useSelector((state) => state.user);
+  const filerPickerRef = useRef<HTMLInputElement>(null);
+  const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   async function sendTweet() {
     if (!user.username) {
@@ -63,13 +64,19 @@ export default function TweetInput() {
     setLoading(false);
   }
 
-  function addImageToTweet(e) {
+  function addImageToTweet(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!e.target.files) {
+      return;
+    }
     const reader = new FileReader();
     if (e.target.files[0]) {
       reader.readAsDataURL(e.target.files[0]);
     }
 
     reader.addEventListener("load", (e) => {
+      if (!e.target) {
+        return;
+      }
       setImage(e.target.result);
     });
   }
@@ -115,7 +122,9 @@ export default function TweetInput() {
             <div className="flex space-x-0">
               <div
                 className={`iconAnimation`}
-                onClick={() => filerPickerRef.current.click()}
+                onClick={() =>
+                  filerPickerRef.current && filerPickerRef.current.click()
+                }
               >
                 <Icon Icons={PhotographIcon} />
               </div>
@@ -146,7 +155,7 @@ export default function TweetInput() {
     </div>
   );
 }
-function Icon({ Icons }) {
+function Icon({ Icons }: { Icons: any }) {
   return (
     <div className="iconAnimation">
       <Icons

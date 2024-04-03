@@ -1,9 +1,8 @@
-import { auth, db } from "@/lib/firebase";
+import { auth } from "@/lib/firebase";
 import {
   closeLoginModal,
   closeSignupModal,
   openLoginModal,
-  openSignupModal,
   openStripModal,
 } from "@/redux/modalSlice";
 import { signOutUser } from "@/redux/userSlice";
@@ -20,16 +19,14 @@ import {
 import { RiTwitterXFill } from "react-icons/ri";
 import { signOut } from "firebase/auth";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SideBarThemeToggle from "./SideBarThemeToggle";
 import Link from "next/link";
-import { doc, updateDoc } from "firebase/firestore";
-import { useRouter } from "next/router";
+import { RootState } from "@/redux/store";
 
 export default function SideBar() {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state: RootState) => state.user);
   async function handleSignOut() {
     await signOut(auth);
     dispatch(signOutUser());
@@ -94,9 +91,15 @@ export default function SideBar() {
   );
 }
 
-function SideBarLink({ text, Icon }) {
+interface SideBarLinkProps {
+  text: string;
+  // fix icon type
+  Icon: any;
+}
+
+function SideBarLink({ text, Icon }: SideBarLinkProps) {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state: RootState) => state.user);
   function handleStripeModal() {
     if (!user.username && text === "Get Premium+") {
       dispatch(openLoginModal());

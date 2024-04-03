@@ -16,36 +16,62 @@ import { db } from "@/lib/firebase";
 import Moment from "react-moment";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { Key, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { openLoginModal } from "@/redux/modalSlice";
+import { GetServerSidePropsContext } from "next";
+import { RootState } from "@/redux/store";
 
-export async function getServerSideProps(context) {
+interface CommentProps {
+  comment: string;
+  photoUrl: string;
+  name: string;
+  username: string;
+}
+
+interface FormattedDataProps {
+  username: string;
+  name: string;
+  photoUrl: string;
+  text: string;
+  comments: CommentProps[] | null;
+  timestamp: string;
+  image: string | null;
+  id: string;
+}
+
+export async function getServerSideProps(context: { query: { id: string } }) {
   const id = context.query.id;
   const docRef = doc(db, "posts", id);
   const docSnap = await getDoc(docRef);
   const data = docSnap.data();
-  const formattedData = {
-    username: data.username,
-    name: data.name,
-    photoUrl: data.photoUrl,
-    text: data.tweet,
-    comments: data.comments || null,
-    timestamp: JSON.stringify(data.timestamp.toDate()),
-    image: data.image || null,
+
+  const formattedData: FormattedDataProps = {
+    username: data?.username,
+    name: data?.name,
+    photoUrl: data?.photoUrl,
+    text: data?.tweet,
+    comments: data?.comments || null,
+    timestamp: JSON.stringify(data?.timestamp.toDate()),
+    image: data?.image || null,
     id: id,
   };
   return {
     props: {
-      tweetData: formattedData,
+      tweetData: formattedData as FormattedDataProps,
     },
   };
 }
-export default function CommentsPage({ tweetData }) {
-  const user = useSelector((state) => state.user);
+export default function CommentsPage({
+  tweetData,
+}: {
+  tweetData: FormattedDataProps;
+}) {
+  console.log(tweetData);
+  const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const router = useRouter();
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState<string>("");
 
   async function sendComment() {
     const docRef = doc(db, "posts", tweetData.id);
@@ -62,8 +88,11 @@ export default function CommentsPage({ tweetData }) {
     setComment("");
   }
 
-  async function deleteComment(currentComment) {
+  async function deleteComment(currentComment: string) {
     const docRef = doc(db, "posts", tweetData.id);
+    if (!tweetData.comments) {
+      return;
+    }
     const updatedComments = tweetData.comments.filter((comment) => {
       return comment.comment !== currentComment;
     });
@@ -86,6 +115,8 @@ export default function CommentsPage({ tweetData }) {
       userSignedOut();
     }
   }, [user]);
+
+  console.log(tweetData);
 
   return (
     <div>
@@ -112,7 +143,6 @@ export default function CommentsPage({ tweetData }) {
                 src={tweetData.photoUrl}
                 className="rounded-full w-11 h-11 object-cover"
               />
-
               <div>
                 <div className="flex text-gray-500 items-center space-x-2 mb-1">
                   <h1 className="font-bold text-black dark:text-white">
@@ -140,14 +170,13 @@ export default function CommentsPage({ tweetData }) {
               <img
                 alt="user icon"
                 className="h-12 w-12 rounded-full object-cover"
-                src={user.photoUrl}
+                src={user.photoUrl ? user.photoUrl : ""}
               />
               <textarea
                 wrap="soft"
                 placeholder="Tweet your reply"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                type="text"
                 className="w-full break-words dark:bg-black t dark:text-white focus:outline-none  text-black resize-none"
               />
             </div>
@@ -161,7 +190,11 @@ export default function CommentsPage({ tweetData }) {
             </button>
           </div>
           {tweetData.comments?.map((comment, idx) => (
-            <TweetComment comment={comment} key={idx} deleteComment={deleteComment} />
+            <TweetComment
+              comment={comment}
+              key={idx}
+              deleteComment={deleteComment}
+            />
           ))}
         </div>
         <Trending />
@@ -170,8 +203,14 @@ export default function CommentsPage({ tweetData }) {
   );
 }
 
-function TweetComment({ comment, deleteComment }) {
-  const user = useSelector((state) => state.user);
+function TweetComment({
+  comment,
+  deleteComment,
+}: {
+  comment: CommentProps;
+  deleteComment: (value: string) => void;
+}) {
+  const user = useSelector((state: RootState) => state.user);
   return (
     <div className=" border-b  border-gray-200 dark:border-gray-700">
       <div className="flex space-x-3 p-3 flex-1 relative border-gray-700">

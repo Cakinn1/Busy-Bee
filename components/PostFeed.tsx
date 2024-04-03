@@ -1,15 +1,20 @@
 import { db } from "@/lib/firebase";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import {
+  QueryDocumentSnapshot,
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+} from "firebase/firestore";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Tweet from "./Tweet";
 import TweetInput from "./TweetInput";
 import TweetSkeletonLoading from "./TweetSkeletonLoading";
 
-export default function PostFeed({ isLoading }) {
-  const [tweets, setTweets] = useState([]);
-  const [loading, setLoading] = useState(false);
-
+export default function PostFeed({ isLoading }: { isLoading: boolean }) {
+  const [tweets, setTweets] = useState<QueryDocumentSnapshot[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   async function fetchQuery() {
     try {
       setLoading(true);

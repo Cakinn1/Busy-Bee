@@ -16,40 +16,38 @@ import { setUser } from "@/redux/userSlice";
 import { useRouter } from "next/router";
 import { EyeIcon, EyeOffIcon, XIcon } from "@heroicons/react/outline";
 import { addDoc, collection } from "firebase/firestore";
+import { RootState } from "@/redux/store";
 
 export default function SignupModal() {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [type, setType] = useState("");
-  const [error, setError] = useState(false);
-  const isOpen = useSelector((state) => state.modals.signupModalOpen);
+  const [email, setEmail] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [type, setType] = useState<string>("");
+  const [error, setError] = useState<boolean>(false);
+  const isOpen = useSelector(
+    (state: RootState) => state.modals.signupModalOpen
+  );
   const dispatch = useDispatch();
   const router = useRouter();
 
   async function handleSignUp() {
     try {
+      if (!auth.currentUser) {
+        return console.log("Current user does not exist");
+      }
+      //
       const userCredentials = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
+      //
       await updateProfile(auth.currentUser, {
         displayName: name,
         photoURL: `./assets/profilePictures/pfp${Math.ceil(
           Math.random() * 6
         )}.png`,
       });
-
-      // await addDoc(collection(db, "users"), {
-      //   username: user.email.split("@")[0],
-      //   name: user.displayName,
-      //   email: user.email,
-      //   uid: user.uid,
-      //   photoUrl: user.photoURL,
-      //   badge: "",
-      // });
-
       router.reload();
     } catch (error) {
       setError(true);
@@ -70,7 +68,7 @@ export default function SignupModal() {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (!currentUser) return;
       await addDoc(collection(db, "users"), {
-        username: currentUser.email.split("@")[0],
+        username: currentUser.email!.split("@")[0],
         name: currentUser.displayName,
         email: currentUser.email,
         uid: currentUser.uid,
@@ -79,7 +77,7 @@ export default function SignupModal() {
       });
       dispatch(
         setUser({
-          username: currentUser.email.split("@")[0],
+          username: currentUser.email!.split("@")[0],
           name: currentUser.displayName,
           email: currentUser.email,
           uid: currentUser.uid,
@@ -123,11 +121,13 @@ export default function SignupModal() {
             <h1 className="text-center mt-4 font-bold text-lg"> or</h1>
             <h1 className=" mt-4 font-bold text-4xl"> Create your Account</h1>
             <HandleInput
+              setType={setType}
               onClick={setName}
               type={"text"}
               placeholder={"Full Name"}
             />
             <HandleInput
+              setType={setType}
               onClick={setEmail}
               type={"email"}
               placeholder={"Email"}
@@ -153,7 +153,19 @@ export default function SignupModal() {
   );
 }
 
-function HandleInput({ onClick, placeholder, type, setType }) {
+interface HandleInputProps {
+  onClick: (value: string) => void;
+  placeholder: string;
+  type: string;
+  setType: (value: string) => void;
+}
+
+function HandleInput({
+  onClick,
+  placeholder,
+  type,
+  setType,
+}: HandleInputProps) {
   return (
     <>
       <input
@@ -186,10 +198,15 @@ function HandleInput({ onClick, placeholder, type, setType }) {
   );
 }
 
-function HandleButton({ onClick, text }) {
+interface HandleButtonProps {
+  onClick: () => void;
+  text: string;
+}
+
+function HandleButton({ onClick, text }: HandleButtonProps) {
   return (
     <button
-      className="bg-[#F4AF01] mt-[32px]   text-white  w-full font-bold text-lg rounded-md p-2"
+      className="bg-[#F4AF01] mt-[32px] text-white  w-full font-bold text-lg rounded-md p-2"
       onClick={onClick}
     >
       {text}

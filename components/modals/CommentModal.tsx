@@ -1,5 +1,6 @@
 import { db } from "@/lib/firebase";
 import { closeCommentModal } from "@/redux/modalSlice";
+import { RootState } from "@/redux/store";
 import {
   CalendarIcon,
   ChartBarIcon,
@@ -15,15 +16,20 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function CommentModal() {
-  const isOpen = useSelector((state) => state.modals.commentModalOpen);
-  const userImg = useSelector((state) => state.user.photoUrl);
-  const tweetDetails = useSelector((state) => state.modals.commentTweetDetails);
-  const user = useSelector((state) => state.user);
-  const [comment, setComment] = useState("");
-
+  const isOpen = useSelector(
+    (state: RootState) => state.modals.commentModalOpen
+  );
+  const userImg = useSelector((state: RootState) => state.user.photoUrl);
+  const tweetDetails = useSelector((state: RootState) => state.comment);
+  const user = useSelector((state: RootState) => state.user);
   const router = useRouter();
+  const dispatch = useDispatch();
+  const [comment, setComment] = useState<string>("");
 
   async function sendComment() {
+    if (!tweetDetails.id) {
+      return;
+    }
     const docRef = doc(db, "posts", tweetDetails.id);
     const commentDetails = {
       username: user.username,
@@ -39,7 +45,6 @@ export default function CommentModal() {
     router.push("/" + tweetDetails.id);
   }
 
-  const dispatch = useDispatch();
   return (
     <>
       <Modal
@@ -67,7 +72,7 @@ export default function CommentModal() {
               <img
                 alt="user icon"
                 className="rounded-full h-12 w-12 object-cover"
-                src={tweetDetails.photoUrl}
+                src={tweetDetails.photoUrl ? tweetDetails?.photoUrl : ""}
               />
               <div>
                 <div className="flex space-x-1.5">
@@ -94,7 +99,7 @@ export default function CommentModal() {
               <img
                 alt="user icon"
                 className="rounded-full h-12 w-12 object-cover"
-                src={userImg}
+                src={userImg ? userImg : ""}
               />
               <div className="w-full">
                 <textarea
@@ -130,7 +135,7 @@ export default function CommentModal() {
   );
 }
 
-function Icons({ Icon }) {
+function Icons({ Icon }: any) {
   return (
     <div className="iconAnimation">
       <Icon className="h-[22px] text-[#F4AF01]" />

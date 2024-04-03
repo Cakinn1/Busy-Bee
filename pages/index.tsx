@@ -13,6 +13,7 @@ import { getProducts } from "@stripe/firestore-stripe-payments";
 import StripeModal from "@/components/modals/StripeModal";
 import React from "react";
 import { RootState } from "@/redux/store";
+import FeedContext from "@/context/FeedContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -42,8 +43,10 @@ export default function Home() {
         className="bg-white dark:bg-black duration-100 min-h-screen   text-[#E7E9EA] md:justify-cente max-w-[1400px] mx-auto
        flex"
       >
-        <SideBar />
-        <PostFeed isLoading={isLoading} />
+        <FeedContext>
+          <SideBar />
+          <PostFeed isLoading={isLoading} />
+        </FeedContext>
         <Trending />
       </div>
       <CommentModal />
@@ -53,6 +56,5 @@ export default function Home() {
   );
 }
 
-//fix env file not working, add a way to change mode based on system light/dark mode. (make it a pop up)
-// change isLoading to redux later (not need at the moment most likely overkill tbh)
+// add a way to change mode based on system light/dark mode. (make it a pop up)
 // fix image color on dark mode

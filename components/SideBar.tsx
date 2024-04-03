@@ -23,10 +23,13 @@ import { useDispatch, useSelector } from "react-redux";
 import SideBarThemeToggle from "./SideBarThemeToggle";
 import Link from "next/link";
 import { RootState } from "@/redux/store";
+import { useContext } from "react";
+import { feedContext } from "@/context/FeedContext";
 
 export default function SideBar() {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
+  const { setFeed } = useContext(feedContext);
   async function handleSignOut() {
     await signOut(auth);
     dispatch(signOutUser());
@@ -34,8 +37,9 @@ export default function SideBar() {
     dispatch(closeLoginModal());
   }
 
-  function scrollToTop() {
+  function scrollToTopAndChangeFeed() {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    setFeed("tweets");
   }
 
   return (
@@ -50,14 +54,16 @@ export default function SideBar() {
             height={48}
           />
         </div>
-        <Link href="/" scroll={false} onClick={scrollToTop}>
+        <Link href="/" scroll={false} onClick={scrollToTopAndChangeFeed}>
           <SideBarLink Icon={HomeIcon} text={"Home"} />
         </Link>
         <SideBarLink Icon={RiTwitterXFill} text={"Get Premium+"} />
         <SideBarLink Icon={HashtagIcon} text={"Explore"} />
         <SideBarLink Icon={BellIcon} text={"Notifications"} />
         <SideBarLink Icon={InboxIcon} text={"Messages"} />
-        <SideBarLink Icon={BookmarkIcon} text={"Bookmarks"} />
+        <div onClick={() => setFeed("bookmarks")}>
+          <SideBarLink Icon={BookmarkIcon} text={"Bookmarks"} />
+        </div>
         <SideBarLink Icon={UserIcon} text={"Profile"} />
         <SideBarThemeToggle sideBarLink={true} />
         <SideBarLink Icon={DotsCircleHorizontalIcon} text={"More"} />
@@ -99,6 +105,7 @@ interface SideBarLinkProps {
 
 function SideBarLink({ text, Icon }: SideBarLinkProps) {
   const dispatch = useDispatch();
+
   const user = useSelector((state: RootState) => state.user);
   function handleStripeModal() {
     if (!user.username && text === "Get Premium+") {

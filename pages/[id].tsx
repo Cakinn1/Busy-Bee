@@ -67,7 +67,6 @@ export default function CommentsPage({
 }: {
   tweetData: FormattedDataProps;
 }) {
-  console.log(tweetData);
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -116,7 +115,6 @@ export default function CommentsPage({
     }
   }, [user]);
 
-  console.log(tweetData);
 
   return (
     <div>

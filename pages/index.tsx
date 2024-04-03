@@ -14,14 +14,16 @@ import StripeModal from "@/components/modals/StripeModal";
 import React from "react";
 import { RootState } from "@/redux/store";
 import FeedContext from "@/context/FeedContext";
-import LoadingBar from "react-top-loading-bar";
 import ProgressContext, { progressContext } from "@/context/ProgressContext";
+import { useDispatch } from "react-redux";
+import { toggleTheme, systemTheme } from "@/redux/themeSlice";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const username = useSelector((state: RootState) => state.user.username);
-  const { progress, setProgress } = useContext(progressContext);
+  const theme = useSelector((state: RootState) => state.theme.isDarkMode);
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -34,6 +36,20 @@ export default function Home() {
       setIsLoading(false);
     }, 1500);
   }, [isLoading]);
+
+  useEffect(() => {
+    const initialPreference = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    if (initialPreference) {
+      document.documentElement.classList.add("dark");
+      dispatch(systemTheme(true));
+    } else {
+      document.documentElement.classList.remove("dark");
+      dispatch(systemTheme(false));
+    }
+    console.log('dispathc')
+  }, [dispatch]);
 
   return (
     <>
@@ -53,7 +69,6 @@ export default function Home() {
           <Trending />
         </div>
         <CommentModal />
-
         <StripeModal />
         {!username && <BottomBanner />}
       </ProgressContext>

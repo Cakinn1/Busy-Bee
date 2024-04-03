@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,19 +7,36 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { EyeIcon, EyeOffIcon, XIcon } from "@heroicons/react/outline";
 import { RootState } from "@/redux/store";
+import { progressContext } from "@/context/ProgressContext";
 export default function LoginModal() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [type, setType] = useState<string>("");
   const isOpen = useSelector((state: RootState) => state.modals.loginModalOpen);
   const dispatch = useDispatch();
+  const { setProgress } = useContext(progressContext);
 
   async function handleSignIn() {
-    await signInWithEmailAndPassword(auth, email, password);
+    try {
+      setProgress(10);
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.error(error, "error signing in");
+      setProgress(0);
+    } finally {
+      setProgress(100);
+    }
   }
 
   async function handleGuestSignIn() {
-    await signInWithEmailAndPassword(auth, "guest12345@gmail.com", "123456");
+    try {
+      setProgress(10);
+      await signInWithEmailAndPassword(auth, "guest12345@gmail.com", "123456");
+    } catch (error) {
+      console.error(error, "error signing into guest account");
+    } finally {
+      setProgress(100);
+    }
   }
 
   useEffect(() => {

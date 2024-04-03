@@ -1,26 +1,28 @@
 import { db } from "@/lib/firebase";
 import {
+  DocumentData,
   QueryDocumentSnapshot,
   collection,
   onSnapshot,
   orderBy,
   query,
 } from "firebase/firestore";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Tweet from "./Tweet";
 import TweetInput from "./TweetInput";
 import TweetSkeletonLoading from "./TweetSkeletonLoading";
-import { StringFormat } from "firebase/storage";
+import Moment from "react-moment";
+import { feedContext } from "@/context/FeedContext";
 
 export interface DataProps {
   badge?: string;
   image?: string;
   comments?: CommentsProps[] | [];
+  bookmark?: string;
   likes: string[] | [];
   name: string;
   photoUrl: string;
-  timestamp: string;
+  timestamp: React.ReactElement;
   tweet: string;
   uid: string;
   username: string;
@@ -36,15 +38,28 @@ export interface CommentsProps {
 export default function PostFeed({ isLoading }: { isLoading: boolean }) {
   const [tweets, setTweets] = useState<QueryDocumentSnapshot[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const { feed } = useContext(feedContext);
   async function fetchQuery() {
     try {
       setLoading(true);
       // Simulate loading state effect
       await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      const collectionName = feed === "tweets" ? "posts" : "bookmark";
+
       const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        setTweets(snapshot.docs);
         setLoading(false);
+        // console.log(snapshot.docs);
+        // const data = snapshot.docs.map((item) => item.data());
+        setTweets(snapshot.docs);
+
+        // if (feed === "tweets") {
+        //   setTweets(data);
+        // } else {
+        //   const t = data?.filter((item) => item?.bookmark?.length > 0);
+        //   setTweets(data)
+        // }
       });
       return unsubscribe;
     } catch (error) {
@@ -56,7 +71,7 @@ export default function PostFeed({ isLoading }: { isLoading: boolean }) {
 
   useEffect(() => {
     fetchQuery();
-  }, []);
+  }, [feed]);
 
   return (
     <div
@@ -78,14 +93,18 @@ export default function PostFeed({ isLoading }: { isLoading: boolean }) {
           })
         : tweets.map((tweet) => {
             const documentData = tweet.data();
+
             const tweetData: DataProps = {
               likes: documentData.likes || [],
               image: documentData.image || "",
               comments: documentData.comments || [],
               badge: documentData.badge || "",
-              name: documentData.names,
+              bookmark: documentData.bookmark || "",
+              name: documentData.name,
               photoUrl: documentData.photoUrl,
-              timestamp: documentData.timestamp.toDate(),
+              timestamp: (
+                <Moment fromNow>{documentData.timestamp?.toDate()}</Moment>
+              ),
               tweet: documentData.tweet,
               uid: documentData.uid,
               username: documentData.username,

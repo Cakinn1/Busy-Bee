@@ -7,10 +7,12 @@ import {
   TrashIcon,
   UploadIcon,
   BadgeCheckIcon,
+  BookmarkIcon,
 } from "@heroicons/react/outline";
 import { HeartIcon as FilledHeartIcon } from "@heroicons/react/solid";
 import {
   DocumentData,
+  addDoc,
   arrayRemove,
   arrayUnion,
   collection,
@@ -24,7 +26,6 @@ import {
 } from "firebase/firestore";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import Moment from "react-moment";
 import { useDispatch, useSelector } from "react-redux";
 import { setCommentTweet } from "@/redux/commentSlice";
 import { RootState } from "@/redux/store";
@@ -33,20 +34,25 @@ import { CommentsProps, DataProps } from "./PostFeed";
 interface TweetHeaderProps {
   username: string;
   name: string;
-  timestamp: string;
+  timestamp: React.ReactElement;
   text: string;
   photoUrl: string;
   image: string | undefined;
   badge: string | undefined;
 }
 
-export default function Tweet({ data, id }: { data: DataProps; id: string }) {
+interface TweetProps {
+  data: DataProps;
+  id: string;
+}
+export default function Tweet({ data, id }: TweetProps) {
   const dispatch = useDispatch();
   const router = useRouter();
   const user = useSelector((state: RootState) => state.user);
   const [likes, setLikes] = useState<string[]>([]);
   const [comments, setComments] = useState<CommentsProps[]>([]);
   const [badge, setBadge] = useState<string>("");
+  const [bookmark, setBookmark] = useState<string>("");
 
   async function likeComment(e: React.MouseEvent) {
     e.stopPropagation();
@@ -77,6 +83,8 @@ export default function Tweet({ data, id }: { data: DataProps; id: string }) {
       setLikes(doc.data()?.likes);
       setComments(doc.data()?.comments);
       setBadge(doc.data()?.badge);
+      setBookmark(doc.data()?.bookmark);
+      // console.log(doc.data())
     });
 
     return unsubscribe;
@@ -106,6 +114,29 @@ export default function Tweet({ data, id }: { data: DataProps; id: string }) {
       })
     );
     dispatch(openCommentModal());
+  }
+
+  async function addBookmark(e: React.MouseEvent) {
+    e.stopPropagation();
+
+    if (!user.uid) {
+      dispatch(openLoginModal());
+      return;
+    }
+
+    console.log("bookmark", bookmark);
+    console.log("user.uid:", user.uid);
+
+    if (bookmark.includes(user.uid)) {
+      await updateDoc(doc(db, "posts", id), {
+        bookmark: arrayRemove(user.uid),
+      });
+      x;
+    } else {
+      await updateDoc(doc(db, "posts", id), {
+        bookmark: arrayUnion(user.uid),
+      });
+    }
   }
 
   const tweetData: TweetHeaderProps = {
@@ -143,6 +174,7 @@ export default function Tweet({ data, id }: { data: DataProps; id: string }) {
             </span>
           )}
         </div>
+
         <div
           className="flex justify-center items-center space-x-2"
           onClick={(e: React.MouseEvent) => likeComment(e)}
@@ -157,12 +189,15 @@ export default function Tweet({ data, id }: { data: DataProps; id: string }) {
         {user.uid === data?.uid && (
           <div
             className="cursor-pointer hover:text-red-600"
-            onClick={deleteTweet}
+            onClick={(e: React.MouseEvent) => deleteTweet(e)}
           >
             <TrashIcon className="w-5" />
           </div>
         )}
         <ChartBarIcon className="w-5 cursor-not-allowed" />
+        <div onClick={(e: React.MouseEvent) => addBookmark(e)}>
+          <BookmarkIcon className="w-5 cursor-not-allowed" />
+        </div>
         <UploadIcon className="w-5 cursor-not-allowed " />
       </div>
     </div>
@@ -189,7 +224,7 @@ export function TweetHeader({ tweetData }: { tweetData: TweetHeaderProps }) {
           )}
           <span>@{tweetData.username}</span>
           <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
-          <Moment fromNow>{tweetData.timestamp}</Moment>
+          {tweetData.timestamp}
         </div>
         <span className="text-black dark:text-white">{tweetData.text}</span>
         {tweetData.image && (

@@ -82,7 +82,6 @@ export default function PostFeed({ isLoading }: { isLoading: boolean }) {
   }, [feed]);
 
 
-
   return (
     <div
       className="sm:ml-16  xl:ml-[350px] max-w-2xl flex-grow
@@ -135,7 +134,7 @@ export default function PostFeed({ isLoading }: { isLoading: boolean }) {
 
 function NothingBookmarked() {
   return (
-    <div className="items-center p-4 space-y-2 flex flex-col text-black justify-center  ">
+    <div className="items-center p-4 space-y-2 flex flex-col dark:text-white text-black justify-center  ">
       <h1 className="font-bold text-3xl lg:text-4xl ">
         You have nothing book marked
       </h1>

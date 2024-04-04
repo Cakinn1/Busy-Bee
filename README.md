@@ -14,6 +14,16 @@ This project was built using these technologies:
 - Redux
 - Tailwind
 - Firebase
+- Typescript
+
+## Libraries
+
+- Stripe
+- Heroicons
+- React Icons
+- React Moment
+- React Top Loading bar
+- Material Ui
 
 ## Features
 

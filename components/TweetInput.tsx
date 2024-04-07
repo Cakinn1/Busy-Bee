@@ -18,7 +18,14 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
-import { ReactElement, useContext, useRef, useState } from "react";
+import {
+  FormEvent,
+  KeyboardEventHandler,
+  ReactElement,
+  useContext,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SideBarThemeToggle from "./SideBarThemeToggle";
 import { RootState } from "@/redux/store";
@@ -98,13 +105,16 @@ export default function TweetInput() {
         className="rounded-full w-11 h-11 object-cover"
       />
 
-      <div className="w-full">
+      <form onSubmit={(e: FormEvent) => e.preventDefault()} className="w-full">
         {loading ? (
           <h1 className="text-2xl text-gray-500 pt-1 pb-4">
             Uploading post...
           </h1>
         ) : (
           <textarea
+            onKeyDown={(e) => {
+              e.key === "Enter" && sendTweet();
+            }}
             className="bg-transparent dark:text-white resize-none outline-none w-full min-h-[50px] text-lg"
             placeholder="What's on your mind?"
             onChange={(e) => setText(e.target.value)}
@@ -159,12 +169,13 @@ export default function TweetInput() {
               disabled:opacity-50"
             // uid not loading when on this button in db
             onClick={sendTweet}
+            onKeyDown={sendTweet}
             disabled={!text && !image}
           >
             Bumble
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }

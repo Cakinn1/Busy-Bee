@@ -38,12 +38,9 @@ const userSlice = createSlice({
         (state.photoUrl = null),
         (state.badge = null);
     },
-    updateBadge: (state, action) => {
-      return { ...state, badge: action.payload };
-    },
   },
 });
 
-export const { setUser, signOutUser, updateBadge } = userSlice.actions;
+export const { setUser, signOutUser } = userSlice.actions;
 
 export default userSlice.reducer;

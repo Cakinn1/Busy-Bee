@@ -1,0 +1,10 @@
+// import "@testing-library/jest-dom";
+// import { render, screen } from "@testing-library/react";
+
+// describe("page", () => {
+//   it("renders a heading", () => {
+//     render();
+//     const headingText = screen.getByText("My Names Anthony");
+//     expect(headingText).toBeInTheDocument()
+//   })
+// });

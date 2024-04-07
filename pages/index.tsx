@@ -8,21 +8,17 @@ import { useSelector } from "react-redux";
 import CommentModal from "@/components/modals/CommentModal";
 import { useContext, useEffect, useState } from "react";
 import Loading from "@/components/Loading";
-import payments, { loadCheckout } from "../lib/stripe";
-import { getProducts } from "@stripe/firestore-stripe-payments";
 import StripeModal from "@/components/modals/StripeModal";
 import React from "react";
 import { RootState } from "@/redux/store";
 import FeedContext from "@/context/FeedContext";
 import ProgressContext, { progressContext } from "@/context/ProgressContext";
 import { useDispatch } from "react-redux";
-import { toggleTheme, systemTheme } from "@/redux/themeSlice";
-
+import { systemTheme } from "@/redux/themeSlice";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const username = useSelector((state: RootState) => state.user.username);
-  const theme = useSelector((state: RootState) => state.theme.isDarkMode);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -48,8 +44,7 @@ export default function Home() {
       document.documentElement.classList.remove("dark");
       dispatch(systemTheme(false));
     }
-    console.log('dispathc')
-  }, [dispatch]);
+  }, []);
 
   return (
     <>
@@ -70,15 +65,15 @@ export default function Home() {
         </div>
         <CommentModal />
         <StripeModal />
-        {!username && <BottomBanner />}
+        <BottomBanner />
       </ProgressContext>
     </>
   );
 }
-// TODO: 1. Implement a modal/pop up to change dark mode/lightmode theme based on users system color
+
+// ! Not Done:
 // TODO: 2. Find a better image for "busy Bee" on dark mode
 // TODO: 3. Add unit test within application
-// TODO: 4. Insert "bookmark" into all post database
 // TODO: 5. Fix premium/stripe payment system
 // TODO: 6. Fix premium UI modal
 // TODO: 7. Add messaging into application
@@ -88,3 +83,7 @@ export default function Home() {
 // TODO: 11. Fix tweets/bookmarks to always fit the width of email and username
 // TODO: 12 P1. Have Search Busy Bee to actually load tweets by name in a broswer window around 400px high
 // TODO: 12 P2. the users should be able to click on the post and load that current post with how i am already doing it right now.
+
+// ! Done:
+// TODO: 1. Implement a modal/pop up to change dark mode/lightmode theme based on users system color
+// TODO: 4. Insert "bookmark" into all post database

@@ -16,7 +16,6 @@ jest.mock("next/router", () => ({
 }));
 
 describe("bottom banner rendering", () => {
-  // if no user exist dont render banner (no user is logged in)
   it("doesn't render banner if no user exists (user is logged in)", () => {
     // creates a testUser within setUser function
     store.dispatch({ type: "user/setUser", payload: { username: "testUser" } });
@@ -30,6 +29,7 @@ describe("bottom banner rendering", () => {
   });
 
   it("does render in when username does not exist (user is not logged in)", () => {
+    // set the user to null
     store.dispatch({ type: "user/setUser", payload: { username: null } });
 
     render(

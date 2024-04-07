@@ -38,7 +38,6 @@ const userSlice = createSlice({
         (state.photoUrl = null),
         (state.badge = null);
     },
-
   },
 });
 

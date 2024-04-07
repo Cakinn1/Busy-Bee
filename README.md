@@ -15,6 +15,7 @@ This project was built using these technologies:
 - Tailwind
 - Firebase
 - Typescript
+- Jest
 
 ## Libraries
 
